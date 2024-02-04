@@ -16,7 +16,7 @@ defmodule Adeunis.Codec.Alarms do
       alarm_status: decode_alarm_status(alarm_status),
       slave_address: slave_address,
       register_address: register_address,
-      register_value: decode_register_value(register_value)
+      register_value: register_value
     }
   end
 
@@ -26,13 +26,5 @@ defmodule Adeunis.Codec.Alarms do
       0x01 -> :high_threshold
       0x02 -> :low_threshold
     end
-  end
-
-  defp decode_register_value(<<register_value::16>>) do
-    register_value
-  end
-
-  defp decode_register_value(<<register_value::32>>) do
-    register_value
   end
 end
