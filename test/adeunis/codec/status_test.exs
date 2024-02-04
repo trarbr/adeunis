@@ -1,6 +1,8 @@
 defmodule Adeunis.Codec.StatusTest do
   use ExUnit.Case, async: true
+  use ExUnitProperties
 
+  alias AdeunisHelpers.FrameGenerator
   alias Adeunis.Codec.Status
 
   test "decode/1" do
@@ -12,5 +14,11 @@ defmodule Adeunis.Codec.StatusTest do
              app_flag_2: 0,
              frame_counter: 5
            } = Status.decode(<<0b10100001>>)
+  end
+
+  property "decode/1 decodes any valid frame" do
+    check all frame <- FrameGenerator.status() do
+      %Status{} = Status.decode(frame)
+    end
   end
 end

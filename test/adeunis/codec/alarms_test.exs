@@ -1,6 +1,8 @@
 defmodule Adeunis.Codec.AlarmsTest do
   use ExUnit.Case, async: true
+  use ExUnitProperties
 
+  alias AdeunisHelpers.FrameGenerator
   alias Adeunis.Codec.Alarms
   alias Adeunis.Codec.Status
 
@@ -20,5 +22,11 @@ defmodule Adeunis.Codec.AlarmsTest do
              register_address: 50,
              register_value: 305_419_896
            } = Alarms.decode(<<0x45, 0x00, 0x01, 0xA0, 0x0032::16, 0x12345678::32>>)
+  end
+
+  property "decode/1 decodes any valid frame" do
+    check all frame <- FrameGenerator.alarms() do
+      %Alarms{} = Alarms.decode(frame)
+    end
   end
 end

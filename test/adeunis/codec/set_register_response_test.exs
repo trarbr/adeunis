@@ -1,6 +1,8 @@
 defmodule Adeunis.Codec.SetRegisterResponseTest do
   use ExUnit.Case, async: true
+  use ExUnitProperties
 
+  alias AdeunisHelpers.FrameGenerator
   alias Adeunis.Codec.SetRegisterResponse
   alias Adeunis.Codec.Status
 
@@ -16,5 +18,11 @@ defmodule Adeunis.Codec.SetRegisterResponseTest do
       request_status: :success,
       register_id: nil
     } = SetRegisterResponse.decode(<<0x33, 0x80, 0x01>>)
+  end
+
+  property "decode/1 decodes any valid frame" do
+    check all frame <- FrameGenerator.set_register_response() do
+      %SetRegisterResponse{} = SetRegisterResponse.decode(frame)
+    end
   end
 end

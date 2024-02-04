@@ -1,6 +1,8 @@
 defmodule Adeunis.Codec.ProductConfigurationTest do
   use ExUnit.Case, async: true
+  use ExUnitProperties
 
+  alias AdeunisHelpers.FrameGenerator
   alias Adeunis.Codec.ProductConfiguration
   alias Adeunis.Codec.ModbusConfig
   alias Adeunis.Codec.Status
@@ -17,5 +19,11 @@ defmodule Adeunis.Codec.ProductConfigurationTest do
              ProductConfiguration.decode(
                <<0x10, 0x10, 0x21C0::16, 0x21C0::16, 0x00B4::16, 0x44, 0x100::16>>
              )
+  end
+
+  property "decode/1 decodes any valid frame" do
+    check all frame <- FrameGenerator.product_configuration() do
+      %ProductConfiguration{} = ProductConfiguration.decode(frame)
+    end
   end
 end

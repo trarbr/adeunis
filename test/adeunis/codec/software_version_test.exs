@@ -1,6 +1,8 @@
 defmodule Adeunis.Codec.SoftwareVersionTest do
   use ExUnit.Case, async: true
+  use ExUnitProperties
 
+  alias AdeunisHelpers.FrameGenerator
   alias Adeunis.Codec.SoftwareVersion
   alias Adeunis.Codec.Status
 
@@ -18,5 +20,11 @@ defmodule Adeunis.Codec.SoftwareVersionTest do
                patch: 1
              }
            } = SoftwareVersion.decode(<<0x37, 0x20, 0x020100::24, 0x020001::24>>)
+  end
+
+  property "decode/1 decodes any valid frame" do
+    check all frame <- FrameGenerator.software_version() do
+      %SoftwareVersion{} = SoftwareVersion.decode(frame)
+    end
   end
 end

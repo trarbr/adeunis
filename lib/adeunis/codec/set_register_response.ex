@@ -13,11 +13,11 @@ defmodule Adeunis.Codec.SetRegisterResponse do
     }
   end
 
-  def unpack_response(<<request_status>>) do
+  def unpack_response(<<request_status>>) when request_status == 0x01 do
     {request_status, nil}
   end
 
-  def unpack_response(<<request_status, register_id::16>>) do
+  def unpack_response(<<request_status, register_id::16>>) when request_status != 0x01 do
     {request_status, register_id}
   end
 

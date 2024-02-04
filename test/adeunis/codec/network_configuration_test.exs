@@ -1,6 +1,8 @@
 defmodule Adeunis.Codec.NetworkConfigurationTest do
   use ExUnit.Case, async: true
+  use ExUnitProperties
 
+  alias AdeunisHelpers.FrameGenerator
   alias Adeunis.Codec.NetworkConfiguration
   alias Adeunis.Codec.LorawanOptions
   alias Adeunis.Codec.Status
@@ -17,5 +19,11 @@ defmodule Adeunis.Codec.NetworkConfigurationTest do
                0x25,
                0x01
              >>)
+  end
+
+  property "decode/1 decodes any valid frame" do
+    check all frame <- FrameGenerator.network_configuration() do
+      %NetworkConfiguration{} = NetworkConfiguration.decode(frame)
+    end
   end
 end
