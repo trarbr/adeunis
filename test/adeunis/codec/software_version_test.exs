@@ -1,10 +1,12 @@
-defmodule Adeunis.SoftwareVersionTest do
+defmodule Adeunis.Codec.SoftwareVersionTest do
   use ExUnit.Case, async: true
 
-  alias Adeunis.SoftwareVersion
+  alias Adeunis.Codec.SoftwareVersion
+  alias Adeunis.Codec.Status
 
   test "decode/1" do
     assert %SoftwareVersion{
+             status: %Status{},
              app_version: %{
                major: 2,
                minor: 1,

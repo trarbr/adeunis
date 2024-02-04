@@ -1,11 +1,12 @@
-defmodule Adeunis.KeepAliveTest do
+defmodule Adeunis.Codec.KeepAliveTest do
   use ExUnit.Case, async: true
 
-  alias Adeunis.KeepAlive
+  alias Adeunis.Codec.KeepAlive
+  alias Adeunis.Codec.Status
 
   test "decode/1" do
     assert %KeepAlive{
-             status: %Adeunis.Status{}
+             status: %Status{}
            } = KeepAlive.decode(<<0x30, 0x22>>)
   end
 end

@@ -1,7 +1,7 @@
-defmodule Adeunis.LorawanOptionsTest do
+defmodule Adeunis.Codec.LorawanOptionsTest do
   use ExUnit.Case, async: true
 
-  alias Adeunis.LorawanOptions
+  alias Adeunis.Codec.LorawanOptions
 
   test "decode/1" do
     assert %LorawanOptions{

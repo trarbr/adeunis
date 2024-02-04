@@ -1,4 +1,6 @@
-defmodule Adeunis.Alarms do
+defmodule Adeunis.Codec.Alarms do
+  alias Adeunis.Codec
+
   defstruct [:status, :alarm_status, :slave_address, :register_address, :register_value]
 
   def decode(<<
@@ -10,7 +12,7 @@ defmodule Adeunis.Alarms do
         register_value::bytes
       >>) do
     %__MODULE__{
-      status: Adeunis.Status.decode(status),
+      status: Codec.Status.decode(status),
       alarm_status: decode_alarm_status(alarm_status),
       slave_address: slave_address,
       register_address: register_address,

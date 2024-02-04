@@ -1,4 +1,6 @@
-defmodule Adeunis.ProductConfiguration do
+defmodule Adeunis.Codec.ProductConfiguration do
+  alias Adeunis.Codec
+
   defstruct [
     :status,
     :transmission_period_keep_alive,
@@ -18,11 +20,11 @@ defmodule Adeunis.ProductConfiguration do
         modbus_slave_supply_time::16
       >>) do
     %__MODULE__{
-      status: Adeunis.Status.decode(status),
+      status: Codec.Status.decode(status),
       transmission_period_keep_alive: transmission_period_keep_alive,
       transmission_period_periodic_frame: transmission_period_periodic_frame,
       sampling_period: sampling_period,
-      modbus_config: Adeunis.ModbusConfig.decode(modbus_config),
+      modbus_config: Codec.ModbusConfig.decode(modbus_config),
       modbus_slave_supply_time: modbus_slave_supply_time
     }
   end

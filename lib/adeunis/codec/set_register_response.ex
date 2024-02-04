@@ -1,11 +1,13 @@
-defmodule Adeunis.SetRegisterResponse do
+defmodule Adeunis.Codec.SetRegisterResponse do
+  alias Adeunis.Codec
+
   defstruct [:status, :request_status, :register_id]
 
   def decode(<<0x33, status::bytes-1, response::bytes>>) do
     {request_status, register_id} = unpack_response(response)
 
     %__MODULE__{
-      status: Adeunis.Status.decode(status),
+      status: Codec.Status.decode(status),
       request_status: decode_request_status(request_status),
       register_id: register_id
     }

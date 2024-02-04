@@ -1,7 +1,7 @@
-defmodule Adeunis.ModbusConfigTest do
+defmodule Adeunis.Codec.ModbusConfigTest do
   use ExUnit.Case, async: true
 
-  alias Adeunis.ModbusConfig
+  alias Adeunis.Codec.ModbusConfig
 
   test "decode/1" do
     assert %ModbusConfig{

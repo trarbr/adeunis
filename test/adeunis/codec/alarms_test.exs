@@ -1,11 +1,12 @@
-defmodule Adeunis.AlarmsTest do
+defmodule Adeunis.Codec.AlarmsTest do
   use ExUnit.Case, async: true
 
-  alias Adeunis.Alarms
+  alias Adeunis.Codec.Alarms
+  alias Adeunis.Codec.Status
 
   test "decode/1" do
     assert %Alarms{
-             status: %Adeunis.Status{},
+             status: %Status{},
              alarm_status: :high_threshold,
              slave_address: 160,
              register_address: 50,
@@ -13,7 +14,7 @@ defmodule Adeunis.AlarmsTest do
            } = Alarms.decode(<<0x45, 0x00, 0x01, 0xA0, 0x0032::16, 0x1234::16>>)
 
     assert %Alarms{
-             status: %Adeunis.Status{},
+             status: %Status{},
              alarm_status: :high_threshold,
              slave_address: 160,
              register_address: 50,

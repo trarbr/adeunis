@@ -1,9 +1,11 @@
-defmodule Adeunis.ReadModbusRegistersResponse do
+defmodule Adeunis.Codec.ReadModbusRegistersResponse do
+  alias Adeunis.Codec
+
   defstruct [:status, :registers]
 
   def decode(<<0x5E, status::bytes-1, registers::bytes>>) do
     %__MODULE__{
-      status: Adeunis.Status.decode(status),
+      status: Codec.Status.decode(status),
       registers: registers
     }
   end

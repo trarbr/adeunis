@@ -1,15 +1,17 @@
-defmodule Adeunis.ProductConfigurationTest do
+defmodule Adeunis.Codec.ProductConfigurationTest do
   use ExUnit.Case, async: true
 
-  alias Adeunis.ProductConfiguration
+  alias Adeunis.Codec.ProductConfiguration
+  alias Adeunis.Codec.ModbusConfig
+  alias Adeunis.Codec.Status
 
   test "decode/1" do
     assert %ProductConfiguration{
-             status: %Adeunis.Status{},
+             status: %Status{},
              transmission_period_keep_alive: 8640,
              transmission_period_periodic_frame: 8640,
              sampling_period: 180,
-             modbus_config: %Adeunis.ModbusConfig{},
+             modbus_config: %ModbusConfig{},
              modbus_slave_supply_time: 256
            } =
              ProductConfiguration.decode(

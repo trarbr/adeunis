@@ -1,4 +1,4 @@
-defmodule Adeunis.ModbusConfig do
+defmodule Adeunis.Codec.ModbusConfig do
   defstruct [:bus_type, :stop_bits, :parity, :baud_rate]
 
   def decode(<<baud_rate::4, parity::2, stop_bits::1, bus_type::1>>) do
