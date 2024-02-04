@@ -26,4 +26,13 @@ defmodule Adeunis.Codec.NetworkConfigurationTest do
       %NetworkConfiguration{} = NetworkConfiguration.decode(frame)
     end
   end
+
+  property "codec is symmetric" do
+    check all frame <- FrameGenerator.network_configuration() do
+      assert frame ==
+               frame
+               |> NetworkConfiguration.decode()
+               |> NetworkConfiguration.encode()
+    end
+  end
 end

@@ -25,4 +25,15 @@ defmodule Adeunis.Codec.Status do
       configuration_done: configuration_done
     }
   end
+
+  def encode(%__MODULE__{} = status) do
+    <<
+      status.frame_counter::3,
+      status.app_flag_2::1,
+      status.app_flag_1::1,
+      status.hardware_error::1,
+      status.low_battery::1,
+      status.configuration_done::1
+    >>
+  end
 end

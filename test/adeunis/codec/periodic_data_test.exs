@@ -19,4 +19,13 @@ defmodule Adeunis.Codec.PeriodicDataTest do
       %PeriodicData{} = PeriodicData.decode(frame)
     end
   end
+
+  property "codec is symmetric" do
+    check all frame <- FrameGenerator.periodic_data() do
+      assert frame ==
+               frame
+               |> PeriodicData.decode()
+               |> PeriodicData.encode()
+    end
+  end
 end

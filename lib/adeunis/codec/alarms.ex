@@ -20,11 +20,28 @@ defmodule Adeunis.Codec.Alarms do
     }
   end
 
-  defp decode_alarm_status(alarm_status_byte) do
-    case alarm_status_byte do
-      0x00 -> :none
-      0x01 -> :high_threshold
-      0x02 -> :low_threshold
-    end
+  def encode(%__MODULE__{} = alarms) do
+    <<
+      0x45,
+      Codec.Status.encode(alarms.status)::bytes-1,
+      encode_alarm_status(alarms.alarm_status),
+      alarms.slave_address,
+      alarms.register_address::16,
+      alarms.register_value::bytes
+    >>
+  end
+
+  @alarm_statuses %{
+    0x00 => :none,
+    0x01 => :high_threshold,
+    0x02 => :low_threshold
+  }
+
+  defp decode_alarm_status(status)
+  defp encode_alarm_status(status)
+
+  for {value, status} <- @alarm_statuses do
+    defp decode_alarm_status(unquote(value)), do: unquote(status)
+    defp encode_alarm_status(unquote(status)), do: unquote(value)
   end
 end

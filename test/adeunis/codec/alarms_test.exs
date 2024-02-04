@@ -29,4 +29,13 @@ defmodule Adeunis.Codec.AlarmsTest do
       %Alarms{} = Alarms.decode(frame)
     end
   end
+
+  property "codec is symmetric" do
+    check all frame <- FrameGenerator.alarms() do
+      assert frame ==
+               frame
+               |> Alarms.decode()
+               |> Alarms.encode()
+    end
+  end
 end

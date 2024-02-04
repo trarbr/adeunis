@@ -15,8 +15,17 @@ defmodule Adeunis.Codec.ModbusConfigTest do
   end
 
   property "decode/1 decodes any valid frame" do
-    check all frame <- FrameGenerator.modbus_config() do
-      %ModbusConfig{} = ModbusConfig.decode(frame)
+    check all modbus_config <- FrameGenerator.modbus_config() do
+      %ModbusConfig{} = ModbusConfig.decode(modbus_config)
+    end
+  end
+
+  property "codec is symmetric" do
+    check all modbus_config <- FrameGenerator.modbus_config() do
+      assert modbus_config ==
+               modbus_config
+               |> ModbusConfig.decode()
+               |> ModbusConfig.encode()
     end
   end
 end

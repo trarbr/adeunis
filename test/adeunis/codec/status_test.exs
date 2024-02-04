@@ -21,4 +21,13 @@ defmodule Adeunis.Codec.StatusTest do
       %Status{} = Status.decode(frame)
     end
   end
+
+  property "codec is symmetric" do
+    check all status <- FrameGenerator.status() do
+      assert status ==
+               status
+               |> Status.decode()
+               |> Status.encode()
+    end
+  end
 end

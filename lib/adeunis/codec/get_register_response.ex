@@ -9,4 +9,12 @@ defmodule Adeunis.Codec.GetRegisterResponse do
       registers: registers
     }
   end
+
+  def encode(%__MODULE__{} = frame) do
+    <<
+      0x31,
+      Codec.Status.encode(frame.status)::bytes-1,
+      frame.registers::bytes
+    >>
+  end
 end

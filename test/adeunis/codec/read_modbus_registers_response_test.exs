@@ -18,4 +18,13 @@ defmodule Adeunis.Codec.ReadModbusRegistersResponseTest do
       %ReadModbusRegistersResponse{} = ReadModbusRegistersResponse.decode(frame)
     end
   end
+
+  property "codec is symmetric" do
+    check all frame <- FrameGenerator.read_modbus_registers_response() do
+      assert frame ==
+               frame
+               |> ReadModbusRegistersResponse.decode()
+               |> ReadModbusRegistersResponse.encode()
+    end
+  end
 end

@@ -11,11 +11,26 @@ defmodule Adeunis.Codec.WriteModbusRegistersAck do
     }
   end
 
-  def decode_request_status(request_status) do
-    case request_status do
-      0x01 -> :success
-      0x02 -> {:error, :generic}
-      0x03 -> {:error, :invalid_request}
-    end
+  def encode(%__MODULE__{} = frame) do
+    <<
+      0x2F,
+      Codec.Status.encode(frame.status)::bytes-1,
+      frame.downlink_framecode,
+      encode_request_status(frame.request_status)
+    >>
+  end
+
+  @request_status %{
+    0x01 => :success,
+    0x02 => {:error, :generic},
+    0x03 => {:error, :invalid_request}
+  }
+
+  defp decode_request_status(request_status)
+  defp encode_request_status(request_status)
+
+  for {value, request_status} <- @request_status do
+    defp decode_request_status(unquote(value)), do: unquote(request_status)
+    defp encode_request_status(unquote(request_status)), do: unquote(value)
   end
 end

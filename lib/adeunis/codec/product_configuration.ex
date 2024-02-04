@@ -28,4 +28,16 @@ defmodule Adeunis.Codec.ProductConfiguration do
       modbus_slave_supply_time: modbus_slave_supply_time
     }
   end
+
+  def encode(%__MODULE__{} = frame) do
+    <<
+      0x10,
+      Codec.Status.encode(frame.status)::bytes-1,
+      frame.transmission_period_keep_alive::16,
+      frame.transmission_period_periodic_frame::16,
+      frame.sampling_period::16,
+      Codec.ModbusConfig.encode(frame.modbus_config)::bytes-1,
+      frame.modbus_slave_supply_time::16
+    >>
+  end
 end

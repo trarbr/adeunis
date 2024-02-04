@@ -18,4 +18,13 @@ defmodule Adeunis.Codec.GetRegisterResponseTest do
       %GetRegisterResponse{} = GetRegisterResponse.decode(frame)
     end
   end
+
+  property "codec is symmetric" do
+    check all frame <- FrameGenerator.get_register_response() do
+      assert frame ==
+               frame
+               |> GetRegisterResponse.decode()
+               |> GetRegisterResponse.encode()
+    end
+  end
 end

@@ -22,6 +22,14 @@ defmodule Adeunis.Codec.PeriodicData do
     }
   end
 
+  def encode(%__MODULE__{} = frame) do
+    <<
+      frame_code_from_period(frame.period),
+      Codec.Status.encode(frame.status)::bytes-1,
+      frame.registers::bytes
+    >>
+  end
+
   @frame_codes [
     0x44,
     0x5F,
@@ -37,10 +45,10 @@ defmodule Adeunis.Codec.PeriodicData do
   end
 
   defp period_from_frame_code(frame_code)
+  defp frame_code_from_period(frame_code)
 
   for {frame_code, period} <- Enum.with_index(@frame_codes, 1) do
-    defp period_from_frame_code(unquote(frame_code)) do
-      unquote(period)
-    end
+    defp period_from_frame_code(unquote(frame_code)), do: unquote(period)
+    defp frame_code_from_period(unquote(period)), do: unquote(frame_code)
   end
 end

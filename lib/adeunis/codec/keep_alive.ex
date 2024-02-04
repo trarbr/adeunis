@@ -8,4 +8,11 @@ defmodule Adeunis.Codec.KeepAlive do
       status: Codec.Status.decode(status)
     }
   end
+
+  def encode(%__MODULE__{} = frame) do
+    <<
+      0x30,
+      Codec.Status.encode(frame.status)::bytes-1
+    >>
+  end
 end

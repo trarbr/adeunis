@@ -17,4 +17,13 @@ defmodule Adeunis.Codec.KeepAliveTest do
       %KeepAlive{} = KeepAlive.decode(frame)
     end
   end
+
+  property "codec is symmetric" do
+    check all frame <- FrameGenerator.keep_alive() do
+      assert frame ==
+               frame
+               |> KeepAlive.decode()
+               |> KeepAlive.encode()
+    end
+  end
 end

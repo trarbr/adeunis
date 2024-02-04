@@ -9,12 +9,12 @@ defmodule Adeunis.Codec.SoftwareVersionTest do
   test "decode/1" do
     assert %SoftwareVersion{
              status: %Status{},
-             app_version: %{
+             app_version: %Version{
                major: 2,
                minor: 1,
                patch: 0
              },
-             rtu_version: %{
+             rtu_version: %Version{
                major: 2,
                minor: 0,
                patch: 1
@@ -25,6 +25,15 @@ defmodule Adeunis.Codec.SoftwareVersionTest do
   property "decode/1 decodes any valid frame" do
     check all frame <- FrameGenerator.software_version() do
       %SoftwareVersion{} = SoftwareVersion.decode(frame)
+    end
+  end
+
+  property "codec is symmetric" do
+    check all frame <- FrameGenerator.software_version() do
+      assert frame ==
+               frame
+               |> SoftwareVersion.decode()
+               |> SoftwareVersion.encode()
     end
   end
 end

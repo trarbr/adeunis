@@ -26,4 +26,13 @@ defmodule Adeunis.Codec.ProductConfigurationTest do
       %ProductConfiguration{} = ProductConfiguration.decode(frame)
     end
   end
+
+  property "codec is symmetric" do
+    check all frame <- FrameGenerator.product_configuration() do
+      assert frame ==
+               frame
+               |> ProductConfiguration.decode()
+               |> ProductConfiguration.encode()
+    end
+  end
 end

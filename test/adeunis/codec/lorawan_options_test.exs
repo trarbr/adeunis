@@ -18,4 +18,13 @@ defmodule Adeunis.Codec.LorawanOptionsTest do
       %LorawanOptions{} = LorawanOptions.decode(frame)
     end
   end
+
+  property "codec is symmetric" do
+    check all lorawan_options <- FrameGenerator.lorawan_options() do
+      assert lorawan_options ==
+               lorawan_options
+               |> LorawanOptions.decode()
+               |> LorawanOptions.encode()
+    end
+  end
 end
