@@ -137,4 +137,19 @@ defmodule AdeunisHelpers.FrameGenerator do
       <<0x2F, status::bytes-1, 0x08, request_status>>
     end
   end
+
+  def frame() do
+    one_of([
+      alarms(),
+      get_register_response(),
+      keep_alive(),
+      network_configuration(),
+      periodic_data(),
+      product_configuration(),
+      read_modbus_registers_response(),
+      set_register_response(),
+      software_version(),
+      write_modbus_registers_ack()
+    ])
+  end
 end
