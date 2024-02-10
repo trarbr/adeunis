@@ -27,8 +27,11 @@ defmodule AdeunisHelpers.FrameGenerator do
   end
 
   def get_register_response() do
+    # This frame will contain a variable number of bytes depending
+    # on the size of the reqisters that were requested.
+    # A frame contains 3 registers, and a register can be 1 - 4 bytes long.
     gen all status <- status(),
-            registers <- binary(min_length: 0, max_length: 28) do
+            registers <- binary(min_length: 3, max_length: 3 * 4) do
       <<0x31, status::bytes-1, registers::bytes>>
     end
   end
@@ -71,7 +74,7 @@ defmodule AdeunisHelpers.FrameGenerator do
 
     gen all period <- one_of(frame_codes),
             status <- status(),
-            registers <- binary(min_length: 0, max_length: 28) do
+            registers <- binary(min_length: 0, max_length: 48) do
       <<period, status::bytes-1, registers::bytes>>
     end
   end
@@ -99,14 +102,14 @@ defmodule AdeunisHelpers.FrameGenerator do
     gen all slave_address <- integer(0x00..0xFF),
             register_type <- integer(0x00..0x01),
             first_register_address <- integer(0x0000..0xFFFF),
-            number_of_registers <- integer(0x00..0xFF) do
+            number_of_registers <- integer(0x00..0x18) do
       <<0x05, slave_address, register_type, first_register_address::16, number_of_registers>>
     end
   end
 
   def read_modbus_registers_response() do
     gen all status <- status(),
-            registers <- binary(min_length: 0, max_length: 24) do
+            registers <- binary(min_length: 0, max_length: 48) do
       <<0x5E, status::bytes-1, registers::bytes>>
     end
   end
@@ -155,6 +158,16 @@ defmodule AdeunisHelpers.FrameGenerator do
     end
   end
 
+  def write_modbus_registers_request() do
+    gen all slave_address <- integer(0x00..0xFF),
+            first_register_address <- integer(0x0000..0xFFFF),
+            number_of_registers <- integer(0x00..0x18),
+            register_values <- binary(length: number_of_registers * 2) do
+      <<0x08, slave_address, first_register_address::16, number_of_registers,
+        register_values::bytes>>
+    end
+  end
+
   def frame() do
     one_of([
       alarms(),
@@ -169,7 +182,8 @@ defmodule AdeunisHelpers.FrameGenerator do
       read_modbus_registers_response(),
       set_register_response(),
       software_version(),
-      write_modbus_registers_ack()
+      write_modbus_registers_ack(),
+      write_modbus_registers_request()
     ])
   end
 end
