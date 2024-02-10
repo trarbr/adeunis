@@ -12,10 +12,13 @@ defmodule Adeunis.Frame do
     0x20 => Frame.NetworkConfiguration,
     0x2F => Frame.WriteModbusRegistersAck,
     0x30 => Frame.KeepAlive,
-    0x31 => Frame.GetRegisterResponse,
-    0x33 => Frame.SetRegisterResponse,
+    0x31 => Frame.GetRegistersResponse,
+    0x33 => Frame.SetRegistersResponse,
     0x37 => Frame.SoftwareVersion,
+    0x40 => Frame.GetRegistersRequest,
+    0x41 => Frame.SetRegistersRequest,
     0x45 => Frame.Alarms,
+    0x48 => Frame.Reboot,
     0x5E => Frame.ReadModbusRegistersResponse
   }
 

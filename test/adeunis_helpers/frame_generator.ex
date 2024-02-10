@@ -26,6 +26,14 @@ defmodule AdeunisHelpers.FrameGenerator do
     constant(<<0x02>>)
   end
 
+  def get_register_request() do
+    gen all first_register <- integer(0..199),
+            second_register <- integer(0..199),
+            third_register <- integer(0..199) do
+      <<0x40, first_register, second_register, third_register>>
+    end
+  end
+
   def get_register_response() do
     # This frame will contain a variable number of bytes depending
     # on the size of the reqisters that were requested.
@@ -114,6 +122,18 @@ defmodule AdeunisHelpers.FrameGenerator do
     end
   end
 
+  def reboot() do
+    gen all delay <- integer(0x0000..0xFFFF) do
+      <<0x48, delay::16>>
+    end
+  end
+
+  def set_register_request() do
+    gen all registers <- binary(min_length: 3, max_length: 3 * 4) do
+      <<0x41, registers::bytes>>
+    end
+  end
+
   def set_register_response() do
     gen all status <- status(),
             request_status <- integer(0x01..0x08),
@@ -173,6 +193,7 @@ defmodule AdeunisHelpers.FrameGenerator do
       alarms(),
       get_applicative_configuration(),
       get_network_configuration(),
+      get_register_request(),
       get_register_response(),
       keep_alive(),
       network_configuration(),
@@ -180,6 +201,8 @@ defmodule AdeunisHelpers.FrameGenerator do
       product_configuration(),
       read_modbus_registers_request(),
       read_modbus_registers_response(),
+      reboot(),
+      set_register_request(),
       set_register_response(),
       software_version(),
       write_modbus_registers_ack(),

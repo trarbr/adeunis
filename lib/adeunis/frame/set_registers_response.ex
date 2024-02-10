@@ -1,4 +1,4 @@
-defmodule Adeunis.Frame.SetRegisterResponse do
+defmodule Adeunis.Frame.SetRegistersResponse do
   alias Adeunis.Frame
 
   defstruct [:status, :request_status, :register_id]

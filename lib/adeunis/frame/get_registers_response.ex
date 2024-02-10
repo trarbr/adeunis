@@ -1,4 +1,4 @@
-defmodule Adeunis.Frame.GetRegisterResponse do
+defmodule Adeunis.Frame.GetRegistersResponse do
   alias Adeunis.Frame
 
   defstruct [:status, :registers]
