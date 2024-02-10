@@ -1,11 +1,11 @@
-defmodule Adeunis.Codec.WriteModbusRegistersAck do
-  alias Adeunis.Codec
+defmodule Adeunis.Frame.WriteModbusRegistersAck do
+  alias Adeunis.Frame
 
   defstruct [:status, :downlink_framecode, :request_status]
 
   def decode(<<0x2F, status::bytes-1, downlink_framecode, request_status>>) do
     %__MODULE__{
-      status: Codec.Status.decode(status),
+      status: Frame.Status.decode(status),
       downlink_framecode: downlink_framecode,
       request_status: decode_request_status(request_status)
     }
@@ -14,7 +14,7 @@ defmodule Adeunis.Codec.WriteModbusRegistersAck do
   def encode(%__MODULE__{} = frame) do
     <<
       0x2F,
-      Codec.Status.encode(frame.status)::bytes-1,
+      Frame.Status.encode(frame.status)::bytes-1,
       frame.downlink_framecode,
       encode_request_status(frame.request_status)
     >>

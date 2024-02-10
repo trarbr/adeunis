@@ -1,10 +1,10 @@
-defmodule Adeunis.Codec.SetRegisterResponseTest do
+defmodule Adeunis.Frame.SetRegisterResponseTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.SetRegisterResponse
-  alias Adeunis.Codec.Status
+  alias Adeunis.Frame.SetRegisterResponse
+  alias Adeunis.Frame.Status
 
   test "decode/1" do
     %SetRegisterResponse{

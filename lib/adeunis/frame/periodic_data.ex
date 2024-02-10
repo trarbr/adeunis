@@ -1,5 +1,5 @@
-defmodule Adeunis.Codec.PeriodicData do
-  alias Adeunis.Codec
+defmodule Adeunis.Frame.PeriodicData do
+  alias Adeunis.Frame
 
   defstruct [:period, :status, :registers]
 
@@ -17,7 +17,7 @@ defmodule Adeunis.Codec.PeriodicData do
   def decode(<<frame_code, status::bytes-1, rest::bytes>>) do
     %__MODULE__{
       period: period_from_frame_code(frame_code),
-      status: Codec.Status.decode(status),
+      status: Frame.Status.decode(status),
       registers: rest
     }
   end
@@ -25,7 +25,7 @@ defmodule Adeunis.Codec.PeriodicData do
   def encode(%__MODULE__{} = frame) do
     <<
       frame_code_from_period(frame.period),
-      Codec.Status.encode(frame.status)::bytes-1,
+      Frame.Status.encode(frame.status)::bytes-1,
       frame.registers::bytes
     >>
   end

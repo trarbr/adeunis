@@ -1,10 +1,10 @@
-defmodule Adeunis.Codec.ReadModbusRegistersResponseTest do
+defmodule Adeunis.Frame.ReadModbusRegistersResponseTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.ReadModbusRegistersResponse
-  alias Adeunis.Codec.Status
+  alias Adeunis.Frame.ReadModbusRegistersResponse
+  alias Adeunis.Frame.Status
 
   test "decode/1" do
     %ReadModbusRegistersResponse{

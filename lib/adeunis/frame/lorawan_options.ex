@@ -1,4 +1,4 @@
-defmodule Adeunis.Codec.LorawanOptions do
+defmodule Adeunis.Frame.LorawanOptions do
   defstruct [:adr_activation, :duty_cycle_status, :class]
 
   def decode(<<_::2, class::1, _::2, duty_cycle_status::1, _::1, adr_activation::1>>) do

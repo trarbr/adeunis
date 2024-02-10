@@ -1,10 +1,10 @@
-defmodule Adeunis.Codec.PeriodicDataTest do
+defmodule Adeunis.Frame.PeriodicDataTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.PeriodicData
-  alias Adeunis.Codec.Status
+  alias Adeunis.Frame.PeriodicData
+  alias Adeunis.Frame.Status
 
   test "decode/1" do
     assert %PeriodicData{

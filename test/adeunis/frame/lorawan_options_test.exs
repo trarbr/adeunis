@@ -1,9 +1,9 @@
-defmodule Adeunis.Codec.LorawanOptionsTest do
+defmodule Adeunis.Frame.LorawanOptionsTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.LorawanOptions
+  alias Adeunis.Frame.LorawanOptions
 
   test "decode/1" do
     assert %LorawanOptions{

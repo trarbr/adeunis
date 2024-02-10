@@ -1,11 +1,11 @@
-defmodule Adeunis.Codec.SoftwareVersion do
-  alias Adeunis.Codec
+defmodule Adeunis.Frame.SoftwareVersion do
+  alias Adeunis.Frame
 
   defstruct [:status, :app_version, :rtu_version]
 
   def decode(<<0x37, status::bytes-1, app_version::bytes-3, rtu_version::bytes-3>>) do
     %__MODULE__{
-      status: Codec.Status.decode(status),
+      status: Frame.Status.decode(status),
       app_version: decode_version(app_version),
       rtu_version: decode_version(rtu_version)
     }
@@ -14,7 +14,7 @@ defmodule Adeunis.Codec.SoftwareVersion do
   def encode(%__MODULE__{} = frame) do
     <<
       0x37,
-      Codec.Status.encode(frame.status)::bytes-1,
+      Frame.Status.encode(frame.status)::bytes-1,
       encode_version(frame.app_version)::bytes,
       encode_version(frame.rtu_version)::bytes
     >>

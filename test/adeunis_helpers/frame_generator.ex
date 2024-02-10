@@ -58,7 +58,7 @@ defmodule AdeunisHelpers.FrameGenerator do
 
   def periodic_data() do
     frame_codes =
-      Adeunis.Codec.PeriodicData.frame_codes()
+      Adeunis.Frame.PeriodicData.frame_codes()
       |> Enum.map(fn frame_code -> constant(frame_code) end)
 
     gen all period <- one_of(frame_codes),

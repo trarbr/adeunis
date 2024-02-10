@@ -1,9 +1,9 @@
-defmodule Adeunis.Codec.StatusTest do
+defmodule Adeunis.Frame.StatusTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.Status
+  alias Adeunis.Frame.Status
 
   test "decode/1" do
     assert %Status{

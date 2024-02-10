@@ -1,5 +1,5 @@
-defmodule Adeunis.Codec.ProductConfiguration do
-  alias Adeunis.Codec
+defmodule Adeunis.Frame.ProductConfiguration do
+  alias Adeunis.Frame
 
   defstruct [
     :status,
@@ -20,11 +20,11 @@ defmodule Adeunis.Codec.ProductConfiguration do
         modbus_slave_supply_time::16
       >>) do
     %__MODULE__{
-      status: Codec.Status.decode(status),
+      status: Frame.Status.decode(status),
       transmission_period_keep_alive: transmission_period_keep_alive,
       transmission_period_periodic_frame: transmission_period_periodic_frame,
       sampling_period: sampling_period,
-      modbus_config: Codec.ModbusConfig.decode(modbus_config),
+      modbus_config: Frame.ModbusConfig.decode(modbus_config),
       modbus_slave_supply_time: modbus_slave_supply_time
     }
   end
@@ -32,11 +32,11 @@ defmodule Adeunis.Codec.ProductConfiguration do
   def encode(%__MODULE__{} = frame) do
     <<
       0x10,
-      Codec.Status.encode(frame.status)::bytes-1,
+      Frame.Status.encode(frame.status)::bytes-1,
       frame.transmission_period_keep_alive::16,
       frame.transmission_period_periodic_frame::16,
       frame.sampling_period::16,
-      Codec.ModbusConfig.encode(frame.modbus_config)::bytes-1,
+      Frame.ModbusConfig.encode(frame.modbus_config)::bytes-1,
       frame.modbus_slave_supply_time::16
     >>
   end

@@ -1,10 +1,10 @@
-defmodule Adeunis.Codec.KeepAliveTest do
+defmodule Adeunis.Frame.KeepAliveTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.KeepAlive
-  alias Adeunis.Codec.Status
+  alias Adeunis.Frame.KeepAlive
+  alias Adeunis.Frame.Status
 
   test "decode/1" do
     assert %KeepAlive{

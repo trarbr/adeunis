@@ -1,18 +1,18 @@
-defmodule Adeunis.Codec.KeepAlive do
-  alias Adeunis.Codec
+defmodule Adeunis.Frame.KeepAlive do
+  alias Adeunis.Frame
 
   defstruct [:status]
 
   def decode(<<0x30, status::bytes-1>>) do
     %__MODULE__{
-      status: Codec.Status.decode(status)
+      status: Frame.Status.decode(status)
     }
   end
 
   def encode(%__MODULE__{} = frame) do
     <<
       0x30,
-      Codec.Status.encode(frame.status)::bytes-1
+      Frame.Status.encode(frame.status)::bytes-1
     >>
   end
 end

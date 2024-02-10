@@ -1,4 +1,4 @@
-defmodule Adeunis.Codec.Status do
+defmodule Adeunis.Frame.Status do
   defstruct [
     :configuration_done,
     :low_battery,

@@ -1,13 +1,13 @@
-defmodule Adeunis.CodecTest do
+defmodule Adeunis.FrameTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec
+  alias Adeunis.Frame
 
   property "decode/1 can decode any valid frame" do
     check all frame <- FrameGenerator.frame() do
-      assert %{} = Codec.decode(frame)
+      assert %{} = Frame.decode(frame)
     end
   end
 
@@ -15,8 +15,8 @@ defmodule Adeunis.CodecTest do
     check all frame <- FrameGenerator.frame() do
       assert frame ==
                frame
-               |> Codec.decode()
-               |> Codec.encode()
+               |> Frame.decode()
+               |> Frame.encode()
     end
   end
 end

@@ -1,5 +1,5 @@
-defmodule Adeunis.Codec.Alarms do
-  alias Adeunis.Codec
+defmodule Adeunis.Frame.Alarms do
+  alias Adeunis.Frame
 
   defstruct [:status, :alarm_status, :slave_address, :register_address, :register_value]
 
@@ -12,7 +12,7 @@ defmodule Adeunis.Codec.Alarms do
         register_value::bytes
       >>) do
     %__MODULE__{
-      status: Codec.Status.decode(status),
+      status: Frame.Status.decode(status),
       alarm_status: decode_alarm_status(alarm_status),
       slave_address: slave_address,
       register_address: register_address,
@@ -23,7 +23,7 @@ defmodule Adeunis.Codec.Alarms do
   def encode(%__MODULE__{} = alarms) do
     <<
       0x45,
-      Codec.Status.encode(alarms.status)::bytes-1,
+      Frame.Status.encode(alarms.status)::bytes-1,
       encode_alarm_status(alarms.alarm_status),
       alarms.slave_address,
       alarms.register_address::16,

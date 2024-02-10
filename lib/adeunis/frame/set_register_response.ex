@@ -1,5 +1,5 @@
-defmodule Adeunis.Codec.SetRegisterResponse do
-  alias Adeunis.Codec
+defmodule Adeunis.Frame.SetRegisterResponse do
+  alias Adeunis.Frame
 
   defstruct [:status, :request_status, :register_id]
 
@@ -7,7 +7,7 @@ defmodule Adeunis.Codec.SetRegisterResponse do
     {request_status, register_id} = unpack_response(response)
 
     %__MODULE__{
-      status: Codec.Status.decode(status),
+      status: Frame.Status.decode(status),
       request_status: decode_request_status(request_status),
       register_id: register_id
     }
@@ -29,7 +29,7 @@ defmodule Adeunis.Codec.SetRegisterResponse do
 
     <<
       0x33,
-      Codec.Status.encode(frame.status)::bytes-1,
+      Frame.Status.encode(frame.status)::bytes-1,
       response::bytes
     >>
   end

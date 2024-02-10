@@ -1,10 +1,10 @@
-defmodule Adeunis.Codec.SoftwareVersionTest do
+defmodule Adeunis.Frame.SoftwareVersionTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.SoftwareVersion
-  alias Adeunis.Codec.Status
+  alias Adeunis.Frame.SoftwareVersion
+  alias Adeunis.Frame.Status
 
   test "decode/1" do
     assert %SoftwareVersion{

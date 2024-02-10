@@ -1,10 +1,10 @@
-defmodule Adeunis.Codec.AlarmsTest do
+defmodule Adeunis.Frame.AlarmsTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.Alarms
-  alias Adeunis.Codec.Status
+  alias Adeunis.Frame.Alarms
+  alias Adeunis.Frame.Status
 
   test "decode/1" do
     assert %Alarms{

@@ -1,11 +1,11 @@
-defmodule Adeunis.Codec.ProductConfigurationTest do
+defmodule Adeunis.Frame.ProductConfigurationTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.ProductConfiguration
-  alias Adeunis.Codec.ModbusConfig
-  alias Adeunis.Codec.Status
+  alias Adeunis.Frame.ProductConfiguration
+  alias Adeunis.Frame.ModbusConfig
+  alias Adeunis.Frame.Status
 
   test "decode/1" do
     assert %ProductConfiguration{

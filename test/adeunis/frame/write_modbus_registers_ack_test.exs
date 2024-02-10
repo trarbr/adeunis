@@ -1,10 +1,10 @@
-defmodule Adeunis.Codec.WriteModbusRegistersAckTest do
+defmodule Adeunis.Frame.WriteModbusRegistersAckTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.WriteModbusRegistersAck
-  alias Adeunis.Codec.Status
+  alias Adeunis.Frame.WriteModbusRegistersAck
+  alias Adeunis.Frame.Status
 
   test "decode/1" do
     assert %WriteModbusRegistersAck{

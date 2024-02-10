@@ -1,9 +1,9 @@
-defmodule Adeunis.Codec.ModbusConfigTest do
+defmodule Adeunis.Frame.ModbusConfigTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.ModbusConfig
+  alias Adeunis.Frame.ModbusConfig
 
   test "decode/1" do
     assert %ModbusConfig{

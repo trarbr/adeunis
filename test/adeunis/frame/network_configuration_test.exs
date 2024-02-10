@@ -1,11 +1,11 @@
-defmodule Adeunis.Codec.NetworkConfigurationTest do
+defmodule Adeunis.Frame.NetworkConfigurationTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
   alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Codec.NetworkConfiguration
-  alias Adeunis.Codec.LorawanOptions
-  alias Adeunis.Codec.Status
+  alias Adeunis.Frame.NetworkConfiguration
+  alias Adeunis.Frame.LorawanOptions
+  alias Adeunis.Frame.Status
 
   test "decode/1" do
     assert %NetworkConfiguration{
