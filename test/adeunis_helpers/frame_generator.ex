@@ -18,6 +18,10 @@ defmodule AdeunisHelpers.FrameGenerator do
     end
   end
 
+  def get_applicative_configuration() do
+    constant(<<0x01>>)
+  end
+
   def get_register_response() do
     gen all status <- status(),
             registers <- binary(min_length: 0, max_length: 28) do
@@ -141,6 +145,7 @@ defmodule AdeunisHelpers.FrameGenerator do
   def frame() do
     one_of([
       alarms(),
+      get_applicative_configuration(),
       get_register_response(),
       keep_alive(),
       network_configuration(),

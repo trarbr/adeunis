@@ -4,6 +4,7 @@ defmodule Adeunis.Frame do
   @periodic_data_frame_codes Frame.PeriodicData.frame_codes()
 
   @frame_code_to_module %{
+    0x01 => Frame.GetApplicativeConfiguration,
     0x10 => Frame.ProductConfiguration,
     0x20 => Frame.NetworkConfiguration,
     0x2F => Frame.WriteModbusRegistersAck,
