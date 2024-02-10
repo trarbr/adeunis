@@ -6,6 +6,7 @@ defmodule Adeunis.Frame do
   @frame_code_to_module %{
     0x01 => Frame.GetApplicativeConfiguration,
     0x02 => Frame.GetNetworkConfiguration,
+    0x05 => Frame.ReadModbusRegistersRequest,
     0x10 => Frame.ProductConfiguration,
     0x20 => Frame.NetworkConfiguration,
     0x2F => Frame.WriteModbusRegistersAck,

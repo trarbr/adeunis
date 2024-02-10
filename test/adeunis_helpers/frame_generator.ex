@@ -95,6 +95,15 @@ defmodule AdeunisHelpers.FrameGenerator do
     end
   end
 
+  def read_modbus_registers_request() do
+    gen all slave_address <- integer(0x00..0xFF),
+            register_type <- integer(0x00..0x01),
+            first_register_address <- integer(0x0000..0xFFFF),
+            number_of_registers <- integer(0x00..0xFF) do
+      <<0x05, slave_address, register_type, first_register_address::16, number_of_registers>>
+    end
+  end
+
   def read_modbus_registers_response() do
     gen all status <- status(),
             registers <- binary(min_length: 0, max_length: 24) do
@@ -156,6 +165,7 @@ defmodule AdeunisHelpers.FrameGenerator do
       network_configuration(),
       periodic_data(),
       product_configuration(),
+      read_modbus_registers_request(),
       read_modbus_registers_response(),
       set_register_response(),
       software_version(),
