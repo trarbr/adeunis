@@ -35,11 +35,6 @@ defmodule Adeunis.Register.PeriodicData do
     >>
   end
 
-  @register_type %{
-    0 => :holding,
-    1 => :input
-  }
-
   defp decode_associated_periodic_frame(associated_periodic_frame)
        when associated_periodic_frame in 0..5 do
     associated_periodic_frame + 1
@@ -49,6 +44,11 @@ defmodule Adeunis.Register.PeriodicData do
        when associated_periodic_frame in 1..6 do
     associated_periodic_frame - 1
   end
+
+  @register_type %{
+    0 => :holding,
+    1 => :input
+  }
 
   defp decode_register_type(register_type)
   defp encode_register_type(register_type)
