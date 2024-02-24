@@ -3,6 +3,29 @@ defmodule AdeunisHelpers.RegisterGenerator do
 
   alias Adeunis.Register
 
+  def alarm_configuration() do
+    data_types =
+      [:uint16, :int16, :uint32, :int32, :uint32_word_swap, :int32_word_swap]
+      |> Enum.map(&constant/1)
+
+    modbus_register_types = Enum.map([:holding, :input], &constant/1)
+    active_thresholds = Enum.map([:low, :high, :high_and_low], &constant/1)
+
+    gen all slave_address <- integer(0..247),
+            first_register_address <- integer(0..0xFFFF),
+            data_type <- one_of(data_types),
+            modbus_register_type <- one_of(modbus_register_types),
+            active_thresholds <- one_of(active_thresholds) do
+      %Register.AlarmConfiguration{
+        slave_address: slave_address,
+        first_register_address: first_register_address,
+        data_type: data_type,
+        modbus_register_type: modbus_register_type,
+        active_thresholds: active_thresholds
+      }
+    end
+  end
+
   def alarm_repetition_period() do
     gen all period <- integer(0..65535) do
       %Register.AlarmRepetitionPeriod{period: period}
