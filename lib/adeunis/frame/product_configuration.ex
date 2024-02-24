@@ -1,5 +1,6 @@
 defmodule Adeunis.Frame.ProductConfiguration do
   alias Adeunis.Frame
+  alias Adeunis.Register
 
   defstruct [
     :status,
@@ -24,7 +25,7 @@ defmodule Adeunis.Frame.ProductConfiguration do
       transmission_period_keep_alive: transmission_period_keep_alive,
       transmission_period_periodic_frame: transmission_period_periodic_frame,
       sampling_period: sampling_period,
-      modbus_config: Frame.ModbusConfig.decode(modbus_config),
+      modbus_config: Register.ModbusLinkConfiguration.decode(modbus_config),
       modbus_slave_supply_time: modbus_slave_supply_time
     }
   end
@@ -36,7 +37,7 @@ defmodule Adeunis.Frame.ProductConfiguration do
       frame.transmission_period_keep_alive::16,
       frame.transmission_period_periodic_frame::16,
       frame.sampling_period::16,
-      Frame.ModbusConfig.encode(frame.modbus_config)::bytes-1,
+      Register.ModbusLinkConfiguration.encode(frame.modbus_config)::bytes-1,
       frame.modbus_slave_supply_time::16
     >>
   end

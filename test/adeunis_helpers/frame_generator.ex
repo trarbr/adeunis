@@ -2,6 +2,7 @@ defmodule AdeunisHelpers.FrameGenerator do
   use ExUnitProperties
 
   alias Adeunis.Frame
+  alias AdeunisHelpers.RegisterGenerator
 
   def alarms() do
     alarm_statuses = Enum.map([:none, :high_threshold, :low_threshold], &constant/1)
@@ -73,24 +74,6 @@ defmodule AdeunisHelpers.FrameGenerator do
     end
   end
 
-  def modbus_config() do
-    baud_rates = Enum.map([1200, 2400, 4800, 9600, 19200, 38400, 57600, 115_200], &constant/1)
-    parities = Enum.map([:none, :even, :odd], &constant/1)
-    bus_types = Enum.map([:rs_485, :rs_232], &constant/1)
-
-    gen all baud_rate <- one_of(baud_rates),
-            parity <- one_of(parities),
-            stop_bits <- integer(0..1),
-            bus_type <- one_of(bus_types) do
-      %Frame.ModbusConfig{
-        baud_rate: baud_rate,
-        parity: parity,
-        stop_bits: stop_bits + 1,
-        bus_type: bus_type
-      }
-    end
-  end
-
   def network_configuration() do
     provisioning_modes = Enum.map([:abp, :otaa], &constant/1)
 
@@ -124,7 +107,7 @@ defmodule AdeunisHelpers.FrameGenerator do
             transmission_period_keep_alive <- integer(0x0000..0xFFFF),
             transmission_period_periodic_frame <- integer(0x0000..0xFFFF),
             sampling_period <- integer(0x0000..0xFFFF),
-            modbus_config <- modbus_config(),
+            modbus_config <- RegisterGenerator.modbus_link_configuration(),
             modbus_slave_supply_time <- integer(0x0000..0xFFFF) do
       %Frame.ProductConfiguration{
         status: status,
