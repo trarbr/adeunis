@@ -1,155 +1,233 @@
 defmodule AdeunisHelpers.FrameGenerator do
   use ExUnitProperties
 
+  alias Adeunis.Frame
+
   def alarms() do
+    alarm_statuses = Enum.map([:none, :high_threshold, :low_threshold], &constant/1)
+
     gen all status <- status(),
-            alarm_status <- integer(0x00..0x02),
+            alarm_status <- one_of(alarm_statuses),
             slave_address <- integer(0..255),
             register_address <- integer(0x0000..0xFFFF),
             register_value <- one_of([binary(length: 2), binary(length: 4)]) do
-      <<
-        0x45,
-        status::bytes-1,
-        alarm_status,
-        slave_address,
-        register_address::16,
-        register_value::bytes
-      >>
+      %Frame.Alarms{
+        status: status,
+        alarm_status: alarm_status,
+        slave_address: slave_address,
+        register_address: register_address,
+        register_value: register_value
+      }
     end
   end
 
   def get_applicative_configuration() do
-    constant(<<0x01>>)
+    constant(%Frame.GetApplicativeConfiguration{})
   end
 
   def get_network_configuration() do
-    constant(<<0x02>>)
+    constant(%Frame.GetNetworkConfiguration{})
   end
 
   def get_register_request() do
     gen all first_register <- integer(0..199),
             second_register <- integer(0..199),
             third_register <- integer(0..199) do
-      <<0x40, first_register, second_register, third_register>>
+      %Frame.GetRegistersRequest{
+        first_register: first_register + 300,
+        second_register: second_register + 300,
+        third_register: third_register + 300
+      }
     end
   end
 
   def get_register_response() do
-    # This frame will contain a variable number of bytes depending
-    # on the size of the reqisters that were requested.
-    # A frame contains 3 registers, and a register can be 1 - 4 bytes long.
     gen all status <- status(),
             registers <- binary(min_length: 3, max_length: 3 * 4) do
-      <<0x31, status::bytes-1, registers::bytes>>
+      %Frame.GetRegistersResponse{
+        status: status,
+        registers: registers
+      }
     end
   end
 
   def keep_alive() do
     gen all status <- status() do
-      <<0x30, status::bytes-1>>
+      %Frame.KeepAlive{status: status}
     end
   end
 
   def lorawan_options() do
-    gen all class <- integer(0b0..0b1),
-            duty_cycle_status <- integer(0..1),
-            adr_activation <- integer(0..1) do
-      <<0::2, class::1, 0::2, duty_cycle_status::1, 0::1, adr_activation::1>>
+    adr_activations = Enum.map([:off, :on], &constant/1)
+    duty_cycle_statuses = Enum.map([:off, :on], &constant/1)
+    classes = Enum.map([:a, :c], &constant/1)
+
+    gen all class <- one_of(classes),
+            duty_cycle_status <- one_of(duty_cycle_statuses),
+            adr_activation <- one_of(adr_activations) do
+      %Frame.LorawanOptions{
+        class: class,
+        duty_cycle_status: duty_cycle_status,
+        adr_activation: adr_activation
+      }
     end
   end
 
   def modbus_config() do
-    gen all baud_rate <- integer(0..7),
-            parity <- integer(0..2),
+    baud_rates = Enum.map([1200, 2400, 4800, 9600, 19200, 38400, 57600, 115_200], &constant/1)
+    parities = Enum.map([:none, :even, :odd], &constant/1)
+    bus_types = Enum.map([:rs_485, :rs_232], &constant/1)
+
+    gen all baud_rate <- one_of(baud_rates),
+            parity <- one_of(parities),
             stop_bits <- integer(0..1),
-            bus_type <- integer(0..1) do
-      <<baud_rate::4, parity::2, stop_bits::1, bus_type::1>>
+            bus_type <- one_of(bus_types) do
+      %Frame.ModbusConfig{
+        baud_rate: baud_rate,
+        parity: parity,
+        stop_bits: stop_bits + 1,
+        bus_type: bus_type
+      }
     end
   end
 
   def network_configuration() do
+    provisioning_modes = Enum.map([:abp, :otaa], &constant/1)
+
     gen all status <- status(),
             lora_options <- lorawan_options(),
-            provisioning_mode <- integer(0..1) do
-      <<0x20, status::bytes-1, lora_options::bytes-1, provisioning_mode>>
+            provisioning_mode <- one_of(provisioning_modes) do
+      %Frame.NetworkConfiguration{
+        status: status,
+        lora_options: lora_options,
+        provisioning_mode: provisioning_mode
+      }
     end
   end
 
   def periodic_data() do
-    frame_codes =
-      Adeunis.Frame.PeriodicData.frame_codes()
-      |> Enum.map(fn frame_code -> constant(frame_code) end)
+    frame_codes = Enum.map([1, 2, 3, 4, 5, 6], &constant/1)
 
     gen all period <- one_of(frame_codes),
             status <- status(),
             registers <- binary(min_length: 0, max_length: 48) do
-      <<period, status::bytes-1, registers::bytes>>
+      %Frame.PeriodicData{
+        period: period,
+        status: status,
+        registers: registers
+      }
     end
   end
 
   def product_configuration() do
     gen all status <- status(),
-            transmission_keep_alive_time <- integer(0x0000..0xFFFF),
+            transmission_period_keep_alive <- integer(0x0000..0xFFFF),
             transmission_period_periodic_frame <- integer(0x0000..0xFFFF),
             sampling_period <- integer(0x0000..0xFFFF),
             modbus_config <- modbus_config(),
             modbus_slave_supply_time <- integer(0x0000..0xFFFF) do
-      <<
-        0x10,
-        status::bytes-1,
-        transmission_keep_alive_time::16,
-        transmission_period_periodic_frame::16,
-        sampling_period::16,
-        modbus_config::bytes-1,
-        modbus_slave_supply_time::16
-      >>
+      %Frame.ProductConfiguration{
+        status: status,
+        transmission_period_keep_alive: transmission_period_keep_alive,
+        transmission_period_periodic_frame: transmission_period_periodic_frame,
+        sampling_period: sampling_period,
+        modbus_config: modbus_config,
+        modbus_slave_supply_time: modbus_slave_supply_time
+      }
     end
   end
 
   def read_modbus_registers_request() do
+    register_types = Enum.map([:holding, :input], &constant/1)
+
     gen all slave_address <- integer(0x00..0xFF),
-            register_type <- integer(0x00..0x01),
+            register_type <- one_of(register_types),
             first_register_address <- integer(0x0000..0xFFFF),
             number_of_registers <- integer(0x00..0x18) do
-      <<0x05, slave_address, register_type, first_register_address::16, number_of_registers>>
+      %Frame.ReadModbusRegistersRequest{
+        slave_address: slave_address,
+        register_type: register_type,
+        first_register_address: first_register_address,
+        number_of_registers: number_of_registers
+      }
     end
   end
 
   def read_modbus_registers_response() do
     gen all status <- status(),
             registers <- binary(min_length: 0, max_length: 48) do
-      <<0x5E, status::bytes-1, registers::bytes>>
+      %Frame.ReadModbusRegistersResponse{
+        status: status,
+        registers: registers
+      }
     end
   end
 
   def reboot() do
     gen all delay <- integer(0x0000..0xFFFF) do
-      <<0x48, delay::16>>
+      %Frame.Reboot{delay: delay}
     end
   end
 
   def set_register_request() do
     gen all registers <- binary(min_length: 3, max_length: 3 * 4) do
-      <<0x41, registers::bytes>>
+      %Frame.SetRegistersRequest{registers: registers}
     end
   end
 
   def set_register_response() do
+    request_statuses =
+      Enum.map(
+        [
+          :success,
+          {:success, :no_update},
+          {:error, :coherency},
+          {:error, :invalid_register},
+          {:error, :invalid_value},
+          {:error, :truncated_value},
+          {:error, :access_not_allowed},
+          {:error, :generic}
+        ],
+        &constant/1
+      )
+
     gen all status <- status(),
-            request_status <- integer(0x01..0x08),
+            request_status <- one_of(request_statuses),
             register_id <- integer(0x0000..0xFFFF) do
       case request_status do
-        0x01 -> <<0x33, status::bytes-1, request_status>>
-        _ -> <<0x33, status::bytes-1, request_status, register_id::16>>
+        :success ->
+          %Frame.SetRegistersResponse{
+            status: status,
+            request_status: request_status
+          }
+
+        _ ->
+          %Frame.SetRegistersResponse{
+            status: status,
+            request_status: request_status,
+            register_id: register_id
+          }
       end
     end
   end
 
   def software_version() do
     gen all status <- status(),
-            app_version <- integer(0x000000..0xFFFFFF),
-            rtu_version <- integer(0x000000..0xFFFFFF) do
-      <<0x37, status::bytes-1, app_version::24, rtu_version::24>>
+            app_version <- version(),
+            rtu_version <- version() do
+      %Frame.SoftwareVersion{
+        status: status,
+        app_version: app_version,
+        rtu_version: rtu_version
+      }
+    end
+  end
+
+  defp version() do
+    gen all major <- integer(0..255),
+            minor <- integer(0..255),
+            patch <- integer(0..255) do
+      %Version{major: major, minor: minor, patch: patch}
     end
   end
 
@@ -160,21 +238,29 @@ defmodule AdeunisHelpers.FrameGenerator do
             hardware_error <- integer(0b0..0b1),
             low_battery <- integer(0b0..0b1),
             configuration_done <- integer(0b0..0b1) do
-      <<
-        frame_counter::3,
-        app_flag_2::1,
-        app_flag_1::1,
-        hardware_error::1,
-        low_battery::1,
-        configuration_done::1
-      >>
+      %Frame.Status{
+        frame_counter: frame_counter,
+        app_flag_2: app_flag_2,
+        app_flag_1: app_flag_1,
+        hardware_error: hardware_error,
+        low_battery: low_battery,
+        configuration_done: configuration_done
+      }
     end
   end
 
   def write_modbus_registers_ack() do
+    request_statuses =
+      Enum.map([:success, {:error, :generic}, {:error, :invalid_request}], &constant/1)
+
     gen all status <- status(),
-            request_status <- integer(0x01..0x03) do
-      <<0x2F, status::bytes-1, 0x08, request_status>>
+            downlink_framecode <- constant(0x08),
+            request_status <- one_of(request_statuses) do
+      %Frame.WriteModbusRegistersAck{
+        status: status,
+        downlink_framecode: downlink_framecode,
+        request_status: request_status
+      }
     end
   end
 
@@ -183,8 +269,12 @@ defmodule AdeunisHelpers.FrameGenerator do
             first_register_address <- integer(0x0000..0xFFFF),
             number_of_registers <- integer(0x00..0x18),
             register_values <- binary(length: number_of_registers * 2) do
-      <<0x08, slave_address, first_register_address::16, number_of_registers,
-        register_values::bytes>>
+      %Frame.WriteModbusRegistersRequest{
+        slave_address: slave_address,
+        first_register_address: first_register_address,
+        number_of_registers: number_of_registers,
+        register_values: register_values
+      }
     end
   end
 

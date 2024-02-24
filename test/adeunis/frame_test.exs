@@ -5,18 +5,12 @@ defmodule Adeunis.FrameTest do
   alias AdeunisHelpers.FrameGenerator
   alias Adeunis.Frame
 
-  property "decode/1 can decode any valid frame" do
-    check all frame <- FrameGenerator.frame() do
-      assert %{} = Frame.decode(frame)
-    end
-  end
-
   property "codec is symmetric" do
     check all frame <- FrameGenerator.frame() do
       assert frame ==
                frame
-               |> Frame.decode()
                |> Frame.encode()
+               |> Frame.decode()
     end
   end
 end

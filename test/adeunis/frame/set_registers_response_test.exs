@@ -20,18 +20,12 @@ defmodule Adeunis.Frame.SetRegistersResponseTest do
     } = SetRegistersResponse.decode(<<0x33, 0x80, 0x01>>)
   end
 
-  property "decode/1 decodes any valid frame" do
-    check all frame <- FrameGenerator.set_register_response() do
-      %SetRegistersResponse{} = SetRegistersResponse.decode(frame)
-    end
-  end
-
   property "codec is symmetric" do
     check all frame <- FrameGenerator.set_register_response() do
       assert frame ==
                frame
-               |> SetRegistersResponse.decode()
                |> SetRegistersResponse.encode()
+               |> SetRegistersResponse.decode()
     end
   end
 end

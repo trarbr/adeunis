@@ -14,18 +14,12 @@ defmodule Adeunis.Frame.WriteModbusRegistersAckTest do
            } = WriteModbusRegistersAck.decode(<<0x2F, 0x20, 0x08, 0x01>>)
   end
 
-  property "decode/1 decodes any valid frame" do
-    check all frame <- FrameGenerator.write_modbus_registers_ack() do
-      %WriteModbusRegistersAck{} = WriteModbusRegistersAck.decode(frame)
-    end
-  end
-
   property "codec is symmetric" do
     check all frame <- FrameGenerator.write_modbus_registers_ack() do
       assert frame ==
                frame
-               |> WriteModbusRegistersAck.decode()
                |> WriteModbusRegistersAck.encode()
+               |> WriteModbusRegistersAck.decode()
     end
   end
 end

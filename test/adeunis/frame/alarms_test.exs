@@ -24,18 +24,12 @@ defmodule Adeunis.Frame.AlarmsTest do
            } = Alarms.decode(<<0x45, 0x00, 0x01, 0xA0, 0x0032::16, 0x12345678::32>>)
   end
 
-  property "decode/1 decodes any valid frame" do
-    check all frame <- FrameGenerator.alarms() do
-      %Alarms{} = Alarms.decode(frame)
-    end
-  end
-
   property "codec is symmetric" do
     check all frame <- FrameGenerator.alarms() do
       assert frame ==
                frame
-               |> Alarms.decode()
                |> Alarms.encode()
+               |> Alarms.decode()
     end
   end
 end

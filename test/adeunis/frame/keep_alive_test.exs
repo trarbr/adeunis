@@ -12,18 +12,12 @@ defmodule Adeunis.Frame.KeepAliveTest do
            } = KeepAlive.decode(<<0x30, 0x22>>)
   end
 
-  property "decode/1 decodes any valid frame" do
-    check all frame <- FrameGenerator.keep_alive() do
-      %KeepAlive{} = KeepAlive.decode(frame)
-    end
-  end
-
   property "codec is symmetric" do
     check all frame <- FrameGenerator.keep_alive() do
       assert frame ==
                frame
-               |> KeepAlive.decode()
                |> KeepAlive.encode()
+               |> KeepAlive.decode()
     end
   end
 end

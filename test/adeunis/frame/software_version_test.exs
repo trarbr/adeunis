@@ -22,18 +22,12 @@ defmodule Adeunis.Frame.SoftwareVersionTest do
            } = SoftwareVersion.decode(<<0x37, 0x20, 0x020100::24, 0x020001::24>>)
   end
 
-  property "decode/1 decodes any valid frame" do
-    check all frame <- FrameGenerator.software_version() do
-      %SoftwareVersion{} = SoftwareVersion.decode(frame)
-    end
-  end
-
   property "codec is symmetric" do
     check all frame <- FrameGenerator.software_version() do
       assert frame ==
                frame
-               |> SoftwareVersion.decode()
                |> SoftwareVersion.encode()
+               |> SoftwareVersion.decode()
     end
   end
 end

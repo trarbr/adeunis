@@ -14,18 +14,12 @@ defmodule Adeunis.Frame.ReadModbusRegistersRequestTest do
     } = ReadModbusRegistersRequest.decode(<<0x05, 0x0A, 0x01, 0x0020::16, 0x02>>)
   end
 
-  property "decode/1 decodes any valid frame" do
-    check all frame <- FrameGenerator.read_modbus_registers_request() do
-      %ReadModbusRegistersRequest{} = ReadModbusRegistersRequest.decode(frame)
-    end
-  end
-
   property "codec is symmetric" do
     check all frame <- FrameGenerator.read_modbus_registers_request() do
       assert frame ==
                frame
-               |> ReadModbusRegistersRequest.decode()
                |> ReadModbusRegistersRequest.encode()
+               |> ReadModbusRegistersRequest.decode()
     end
   end
 end
