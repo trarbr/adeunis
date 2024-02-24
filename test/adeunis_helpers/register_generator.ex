@@ -3,9 +3,29 @@ defmodule AdeunisHelpers.RegisterGenerator do
 
   alias Adeunis.Register
 
+  def alarm_repetition_period() do
+    gen all period <- integer(0..65535) do
+      %Register.AlarmRepetitionPeriod{period: period}
+    end
+  end
+
+  def alarm_sampling_period() do
+    gen all period <- integer(1..65535) do
+      %Register.AlarmSamplingPeriod{period: period * 10}
+    end
+  end
+
   def keep_alive() do
     gen all period <- integer(2..65535) do
       %Register.KeepAlive{period: period * 10}
+    end
+  end
+
+  def led_activity() do
+    led_activities = Enum.map([:default, :eco], &constant/1)
+
+    gen all led_activity <- one_of(led_activities) do
+      %Register.LEDActivity{led_activity: led_activity}
     end
   end
 
@@ -24,6 +44,12 @@ defmodule AdeunisHelpers.RegisterGenerator do
         stop_bits: stop_bits + 1,
         bus_type: bus_type
       }
+    end
+  end
+
+  def modbus_slave_supply_time() do
+    gen all supply_time <- integer(0..65535) do
+      %Register.ModbusSlaveSupplyTime{supply_time: supply_time * 100}
     end
   end
 
@@ -48,6 +74,20 @@ defmodule AdeunisHelpers.RegisterGenerator do
   def periodic_transmit_period() do
     gen all period <- integer(0..65535) do
       %Register.PeriodicTransmitPeriod{period: period * 10}
+    end
+  end
+
+  def pin_code() do
+    gen all code <- one_of([constant(0), integer(1000..9999)]) do
+      %Register.PINCode{code: code}
+    end
+  end
+
+  def product_mode() do
+    product_modes = Enum.map([:park, :production], &constant/1)
+
+    gen all product_mode <- one_of(product_modes) do
+      %Register.ProductMode{product_mode: product_mode}
     end
   end
 end
