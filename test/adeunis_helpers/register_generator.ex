@@ -44,4 +44,10 @@ defmodule AdeunisHelpers.RegisterGenerator do
       }
     end
   end
+
+  def periodic_transmit_period() do
+    gen all period <- integer(0..65535) do
+      %Register.PeriodicTransmitPeriod{period: period * 10}
+    end
+  end
 end
