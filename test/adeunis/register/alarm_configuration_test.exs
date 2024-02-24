@@ -25,9 +25,9 @@ defmodule Adeunis.Register.AlarmConfigurationTest do
   end
 
   property "codec is symmetric" do
-    check all frame <- RegisterGenerator.alarm_configuration() do
-      assert frame ==
-               frame
+    check all {_, register} <- RegisterGenerator.alarm_configuration() do
+      assert register ==
+               register
                |> AlarmConfiguration.encode()
                |> AlarmConfiguration.decode()
     end

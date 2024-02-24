@@ -10,9 +10,9 @@ defmodule Adeunis.Register.KeepAliveTest do
   end
 
   property "codec is symmetric" do
-    check all frame <- RegisterGenerator.keep_alive() do
-      assert frame ==
-               frame
+    check all {_, register} <- RegisterGenerator.keep_alive() do
+      assert register ==
+               register
                |> KeepAlive.encode()
                |> KeepAlive.decode()
     end

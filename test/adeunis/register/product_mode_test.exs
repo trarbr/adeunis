@@ -10,9 +10,9 @@ defmodule Adeunis.Register.ProductModeTest do
   end
 
   property "codec is symmetric" do
-    check all frame <- RegisterGenerator.product_mode() do
-      assert frame ==
-               frame
+    check all {_, register} <- RegisterGenerator.product_mode() do
+      assert register ==
+               register
                |> ProductMode.encode()
                |> ProductMode.decode()
     end

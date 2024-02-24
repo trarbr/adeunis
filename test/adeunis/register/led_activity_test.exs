@@ -10,9 +10,9 @@ defmodule Adeunis.Register.LEDActivityTest do
   end
 
   property "codec is symmetric" do
-    check all frame <- RegisterGenerator.led_activity() do
-      assert frame ==
-               frame
+    check all {_, register} <- RegisterGenerator.led_activity() do
+      assert register ==
+               register
                |> LEDActivity.encode()
                |> LEDActivity.decode()
     end

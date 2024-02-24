@@ -10,9 +10,9 @@ defmodule Adeunis.Register.PINCodeTest do
   end
 
   property "codec is symmetric" do
-    check all frame <- RegisterGenerator.pin_code() do
-      assert frame ==
-               frame
+    check all {_, register} <- RegisterGenerator.pin_code() do
+      assert register ==
+               register
                |> PINCode.encode()
                |> PINCode.decode()
     end

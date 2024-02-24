@@ -15,9 +15,9 @@ defmodule Adeunis.Frame.ModbusLinkConfigurationTest do
   end
 
   property "codec is symmetric" do
-    check all modbus_config <- RegisterGenerator.modbus_link_configuration() do
-      assert modbus_config ==
-               modbus_config
+    check all {_, register} <- RegisterGenerator.modbus_link_configuration() do
+      assert register ==
+               register
                |> ModbusLinkConfiguration.encode()
                |> ModbusLinkConfiguration.decode()
     end

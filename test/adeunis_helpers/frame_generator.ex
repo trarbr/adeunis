@@ -107,7 +107,7 @@ defmodule AdeunisHelpers.FrameGenerator do
             transmission_period_keep_alive <- integer(0x0000..0xFFFF),
             transmission_period_periodic_frame <- integer(0x0000..0xFFFF),
             sampling_period <- integer(0x0000..0xFFFF),
-            modbus_config <- RegisterGenerator.modbus_link_configuration(),
+            {_, modbus_config} <- RegisterGenerator.modbus_link_configuration(),
             modbus_slave_supply_time <- integer(0x0000..0xFFFF) do
       %Frame.ProductConfiguration{
         status: status,

@@ -10,9 +10,9 @@ defmodule Adeunis.Register.PeriodicTransmitPeriodTest do
   end
 
   property "codec is symmetric" do
-    check all frame <- RegisterGenerator.periodic_transmit_period() do
-      assert frame ==
-               frame
+    check all {_, register} <- RegisterGenerator.periodic_transmit_period() do
+      assert register ==
+               register
                |> PeriodicTransmitPeriod.encode()
                |> PeriodicTransmitPeriod.decode()
     end

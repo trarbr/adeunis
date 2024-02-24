@@ -10,9 +10,9 @@ defmodule Adeunis.Register.AlarmRepetitionPeriodTest do
   end
 
   property "codec is symmetric" do
-    check all frame <- RegisterGenerator.alarm_repetition_period() do
-      assert frame ==
-               frame
+    check all {_, register} <- RegisterGenerator.alarm_repetition_period() do
+      assert register ==
+               register
                |> AlarmRepetitionPeriod.encode()
                |> AlarmRepetitionPeriod.decode()
     end

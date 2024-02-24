@@ -11,9 +11,9 @@ defmodule Adeunis.Register.ModbusSlaveSupplyTimeTest do
   end
 
   property "codec is symmetric" do
-    check all frame <- RegisterGenerator.modbus_slave_supply_time() do
-      assert frame ==
-               frame
+    check all {_, register} <- RegisterGenerator.modbus_slave_supply_time() do
+      assert register ==
+               register
                |> ModbusSlaveSupplyTime.encode()
                |> ModbusSlaveSupplyTime.decode()
     end

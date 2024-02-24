@@ -16,9 +16,9 @@ defmodule Adeunis.Register.PeriodicDataTest do
   end
 
   property "codec is symmetric" do
-    check all frame <- RegisterGenerator.periodic_data() do
-      assert frame ==
-               frame
+    check all {_, register} <- RegisterGenerator.periodic_data() do
+      assert register ==
+               register
                |> PeriodicData.encode()
                |> PeriodicData.decode()
     end

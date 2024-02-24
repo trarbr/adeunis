@@ -10,9 +10,9 @@ defmodule Adeunis.Register.AlarmThresholdTest do
   end
 
   property "codec is symmetric" do
-    check all frame <- RegisterGenerator.alarm_threshold() do
-      assert frame ==
-               frame
+    check all {_, register} <- RegisterGenerator.alarm_threshold() do
+      assert register ==
+               register
                |> AlarmThreshold.encode()
                |> AlarmThreshold.decode()
     end

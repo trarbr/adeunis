@@ -10,9 +10,9 @@ defmodule Adeunis.Register.AlarmHysteresisTest do
   end
 
   property "codec is symmetric" do
-    check all frame <- RegisterGenerator.alarm_hysteresis() do
-      assert frame ==
-               frame
+    check all {_, register} <- RegisterGenerator.alarm_hysteresis() do
+      assert register ==
+               register
                |> AlarmHysteresis.encode()
                |> AlarmHysteresis.decode()
     end
