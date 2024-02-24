@@ -26,4 +26,22 @@ defmodule AdeunisHelpers.RegisterGenerator do
       }
     end
   end
+
+  def periodic_data() do
+    modbus_register_types = Enum.map([:holding, :input], &constant/1)
+
+    gen all slave_address <- integer(0..0xFF),
+            first_register_address <- integer(0..0xFFFF),
+            associated_periodic_frame <- integer(0..5),
+            modbus_register_type <- one_of(modbus_register_types),
+            number_of_registers <- integer(0..0b1111) do
+      %Register.PeriodicData{
+        slave_address: slave_address,
+        first_register_address: first_register_address,
+        associated_periodic_frame: associated_periodic_frame + 1,
+        modbus_register_type: modbus_register_type,
+        number_of_registers: number_of_registers
+      }
+    end
+  end
 end
