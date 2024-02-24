@@ -26,6 +26,12 @@ defmodule AdeunisHelpers.RegisterGenerator do
     end
   end
 
+  def alarm_hysteresis() do
+    gen all hysteresis <- integer(0..0xFFFF) do
+      %Register.AlarmHysteresis{hysteresis: hysteresis}
+    end
+  end
+
   def alarm_repetition_period() do
     gen all period <- integer(0..65535) do
       %Register.AlarmRepetitionPeriod{period: period}
@@ -35,6 +41,12 @@ defmodule AdeunisHelpers.RegisterGenerator do
   def alarm_sampling_period() do
     gen all period <- integer(1..65535) do
       %Register.AlarmSamplingPeriod{period: period * 10}
+    end
+  end
+
+  def alarm_threshold() do
+    gen all threshold <- integer(0..0xFFFFFFFF) do
+      %Register.AlarmThreshold{threshold: threshold}
     end
   end
 
