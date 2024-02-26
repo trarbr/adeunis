@@ -1,5 +1,4 @@
 defmodule Adeunis.Register.PeriodicData do
-  # maybe this struct should also have a key to indicate which periodic register frame this is?
   defstruct [
     :slave_address,
     :first_register_address,
@@ -8,7 +7,6 @@ defmodule Adeunis.Register.PeriodicData do
     :number_of_registers
   ]
 
-  # TODO: Extract the associated periodic frame lookup into its own function
   def decode(<<
         slave_address,
         first_register_address::16,

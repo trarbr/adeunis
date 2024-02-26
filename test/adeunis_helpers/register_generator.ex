@@ -145,7 +145,6 @@ defmodule AdeunisHelpers.RegisterGenerator do
   def product_mode() do
     product_modes = Enum.map([:park, :production], &constant/1)
 
-    # maybe these could return a register id as well, and it could be ignored in most places
     gen all register_id <- constant(306),
             product_mode <- one_of(product_modes) do
       {register_id, %Register.ProductMode{product_mode: product_mode}}
