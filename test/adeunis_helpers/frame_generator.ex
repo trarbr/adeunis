@@ -31,13 +31,9 @@ defmodule AdeunisHelpers.FrameGenerator do
   end
 
   def get_register_request() do
-    gen all first_register <- integer(0..199),
-            second_register <- integer(0..199),
-            third_register <- integer(0..199) do
+    gen all registers <- list_of(integer(300..400), min: 1, max: 5) do
       %Frame.GetRegistersRequest{
-        first_register: first_register + 300,
-        second_register: second_register + 300,
-        third_register: third_register + 300
+        registers: registers
       }
     end
   end
