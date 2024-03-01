@@ -133,8 +133,15 @@ defmodule AdeunisHelpers.FrameGenerator do
   end
 
   def set_register_request() do
-    gen all registers <- binary(min_length: 3, max_length: 3 * 4) do
+    gen all registers <- list_of(settable_register(), min_length: 1, max_length: 3) do
       %Frame.SetRegistersRequest{registers: registers}
+    end
+  end
+
+  defp settable_register() do
+    gen all {register_id, register} <- RegisterGenerator.register(),
+            register_id >= 300 do
+      {register_id, register}
     end
   end
 
