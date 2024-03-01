@@ -78,6 +78,24 @@ defmodule AdeunisHelpers.RegisterGenerator do
     end
   end
 
+  def lorawan_options() do
+    adr_activations = Enum.map([:off, :on], &constant/1)
+    duty_cycle_statuses = Enum.map([:off, :on], &constant/1)
+    classes = Enum.map([:a, :c], &constant/1)
+
+    gen all register_id <- constant(220),
+            class <- one_of(classes),
+            duty_cycle_status <- one_of(duty_cycle_statuses),
+            adr_activation <- one_of(adr_activations) do
+      {register_id,
+       %Register.LorawanOptions{
+         class: class,
+         duty_cycle_status: duty_cycle_status,
+         adr_activation: adr_activation
+       }}
+    end
+  end
+
   def modbus_link_configuration() do
     baud_rates = Enum.map([1200, 2400, 4800, 9600, 19200, 38400, 57600, 115_200], &constant/1)
     parities = Enum.map([:none, :even, :odd], &constant/1)
@@ -160,6 +178,7 @@ defmodule AdeunisHelpers.RegisterGenerator do
       alarm_threshold(),
       keep_alive(),
       led_activity(),
+      lorawan_options(),
       modbus_link_configuration(),
       modbus_slave_supply_time(),
       periodic_data(),

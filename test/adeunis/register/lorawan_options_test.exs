@@ -1,9 +1,9 @@
-defmodule Adeunis.Frame.LorawanOptionsTest do
+defmodule Adeunis.Register.LorawanOptionsTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
-  alias AdeunisHelpers.FrameGenerator
-  alias Adeunis.Frame.LorawanOptions
+  alias AdeunisHelpers.RegisterGenerator
+  alias Adeunis.Register.LorawanOptions
 
   test "decode/1" do
     assert %LorawanOptions{
@@ -14,7 +14,7 @@ defmodule Adeunis.Frame.LorawanOptionsTest do
   end
 
   property "codec is symmetric" do
-    check all lorawan_options <- FrameGenerator.lorawan_options() do
+    check all {_, lorawan_options} <- RegisterGenerator.lorawan_options() do
       assert lorawan_options ==
                lorawan_options
                |> LorawanOptions.encode()

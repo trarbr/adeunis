@@ -54,27 +54,11 @@ defmodule AdeunisHelpers.FrameGenerator do
     end
   end
 
-  def lorawan_options() do
-    adr_activations = Enum.map([:off, :on], &constant/1)
-    duty_cycle_statuses = Enum.map([:off, :on], &constant/1)
-    classes = Enum.map([:a, :c], &constant/1)
-
-    gen all class <- one_of(classes),
-            duty_cycle_status <- one_of(duty_cycle_statuses),
-            adr_activation <- one_of(adr_activations) do
-      %Frame.LorawanOptions{
-        class: class,
-        duty_cycle_status: duty_cycle_status,
-        adr_activation: adr_activation
-      }
-    end
-  end
-
   def network_configuration() do
     provisioning_modes = Enum.map([:abp, :otaa], &constant/1)
 
     gen all status <- status(),
-            lora_options <- lorawan_options(),
+            {_, lora_options} <- RegisterGenerator.lorawan_options(),
             provisioning_mode <- one_of(provisioning_modes) do
       %Frame.NetworkConfiguration{
         status: status,
