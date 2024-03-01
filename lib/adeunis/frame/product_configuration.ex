@@ -4,29 +4,30 @@ defmodule Adeunis.Frame.ProductConfiguration do
 
   defstruct [
     :status,
-    :transmission_period_keep_alive,
-    :transmission_period_periodic_frame,
-    :sampling_period,
-    :modbus_config,
+    :keep_alive,
+    :periodic_transmit_period,
+    :alarm_sampling_period,
+    :modbus_link_configuration,
     :modbus_slave_supply_time
   ]
 
   def decode(<<
         0x10,
         status::bytes-1,
-        transmission_period_keep_alive::16,
-        transmission_period_periodic_frame::16,
-        sampling_period::16,
-        modbus_config::bytes-1,
-        modbus_slave_supply_time::16
+        keep_alive::bytes-2,
+        periodic_transmit_period::bytes-2,
+        alarm_sampling_period::bytes-2,
+        modbus_link_configuration::bytes-1,
+        modbus_slave_supply_time::bytes-2
       >>) do
     %__MODULE__{
       status: Frame.Status.decode(status),
-      transmission_period_keep_alive: transmission_period_keep_alive,
-      transmission_period_periodic_frame: transmission_period_periodic_frame,
-      sampling_period: sampling_period,
-      modbus_config: Register.ModbusLinkConfiguration.decode(modbus_config),
-      modbus_slave_supply_time: modbus_slave_supply_time
+      keep_alive: Register.KeepAlive.decode(keep_alive),
+      periodic_transmit_period: Register.PeriodicTransmitPeriod.decode(periodic_transmit_period),
+      alarm_sampling_period: Register.AlarmSamplingPeriod.decode(alarm_sampling_period),
+      modbus_link_configuration:
+        Register.ModbusLinkConfiguration.decode(modbus_link_configuration),
+      modbus_slave_supply_time: Register.ModbusSlaveSupplyTime.decode(modbus_slave_supply_time)
     }
   end
 
@@ -34,11 +35,11 @@ defmodule Adeunis.Frame.ProductConfiguration do
     <<
       0x10,
       Frame.Status.encode(frame.status)::bytes-1,
-      frame.transmission_period_keep_alive::16,
-      frame.transmission_period_periodic_frame::16,
-      frame.sampling_period::16,
-      Register.ModbusLinkConfiguration.encode(frame.modbus_config)::bytes-1,
-      frame.modbus_slave_supply_time::16
+      Register.KeepAlive.encode(frame.keep_alive)::bytes-2,
+      Register.PeriodicTransmitPeriod.encode(frame.periodic_transmit_period)::bytes-2,
+      Register.AlarmSamplingPeriod.encode(frame.alarm_sampling_period)::bytes-2,
+      Register.ModbusLinkConfiguration.encode(frame.modbus_link_configuration)::bytes-1,
+      Register.ModbusSlaveSupplyTime.encode(frame.modbus_slave_supply_time)::bytes-2
     >>
   end
 end

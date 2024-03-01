@@ -100,17 +100,17 @@ defmodule AdeunisHelpers.FrameGenerator do
 
   def product_configuration() do
     gen all status <- status(),
-            transmission_period_keep_alive <- integer(0x0000..0xFFFF),
-            transmission_period_periodic_frame <- integer(0x0000..0xFFFF),
-            sampling_period <- integer(0x0000..0xFFFF),
-            {_, modbus_config} <- RegisterGenerator.modbus_link_configuration(),
-            modbus_slave_supply_time <- integer(0x0000..0xFFFF) do
+            {_, keep_alive} <- RegisterGenerator.keep_alive(),
+            {_, periodic_transmit_period} <- RegisterGenerator.periodic_transmit_period(),
+            {_, alarm_sampling_period} <- RegisterGenerator.alarm_sampling_period(),
+            {_, modbus_link_configuration} <- RegisterGenerator.modbus_link_configuration(),
+            {_, modbus_slave_supply_time} <- RegisterGenerator.modbus_slave_supply_time() do
       %Frame.ProductConfiguration{
         status: status,
-        transmission_period_keep_alive: transmission_period_keep_alive,
-        transmission_period_periodic_frame: transmission_period_periodic_frame,
-        sampling_period: sampling_period,
-        modbus_config: modbus_config,
+        keep_alive: keep_alive,
+        periodic_transmit_period: periodic_transmit_period,
+        alarm_sampling_period: alarm_sampling_period,
+        modbus_link_configuration: modbus_link_configuration,
         modbus_slave_supply_time: modbus_slave_supply_time
       }
     end
