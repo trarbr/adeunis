@@ -7,10 +7,10 @@ defmodule Adeunis.Frame.GetRegistersResponseTest do
   alias Adeunis.Frame.Status
 
   test "decode/1" do
-    %GetRegistersResponse{
-      status: %Status{},
-      registers: <<0x1234::16, 0xFF, 0x00000000::32>>
-    } = GetRegistersResponse.decode(<<0x31, 0x80, 0x1234::16, 0xFF, 0x00000000::32>>)
+    assert %GetRegistersResponse{
+             status: %Status{},
+             registers: <<0x1234::16, 0xFF, 0x00000000::32>>
+           } = GetRegistersResponse.decode(<<0x31, 0x80, 0x1234::16, 0xFF, 0x00000000::32>>)
   end
 
   property "codec is symmetric" do

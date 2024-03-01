@@ -6,9 +6,9 @@ defmodule Adeunis.Frame.GetRegistersRequestTest do
   alias Adeunis.Frame.GetRegistersRequest
 
   test "decode/1" do
-    %GetRegistersRequest{
-      registers: [300, 320, 332]
-    } = GetRegistersRequest.decode(<<0x40, 0x00, 0x14, 0x20>>)
+    assert %GetRegistersRequest{
+             registers: [300, 320, 332]
+           } = GetRegistersRequest.decode(<<0x40, 0x00, 0x14, 0x20>>)
   end
 
   property "codec is symmetric" do
