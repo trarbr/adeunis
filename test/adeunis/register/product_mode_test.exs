@@ -6,7 +6,7 @@ defmodule Adeunis.Register.ProductModeTest do
   alias Adeunis.Register.ProductMode
 
   test "decode/1 can decode any valid register" do
-    assert %ProductMode{product_mode: :park} = ProductMode.decode(<<0>>)
+    assert %ProductMode{mode: :park} = ProductMode.decode(<<0>>)
   end
 
   property "codec is symmetric" do

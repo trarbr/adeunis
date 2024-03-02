@@ -161,11 +161,11 @@ defmodule AdeunisHelpers.RegisterGenerator do
   end
 
   def product_mode() do
-    product_modes = Enum.map([:park, :production], &constant/1)
+    modes = Enum.map([:park, :production], &constant/1)
 
     gen all register_id <- constant(306),
-            product_mode <- one_of(product_modes) do
-      {register_id, %Register.ProductMode{product_mode: product_mode}}
+            mode <- one_of(modes) do
+      {register_id, %Register.ProductMode{mode: mode}}
     end
   end
 
