@@ -10,8 +10,8 @@ defmodule Adeunis.Frame.NetworkConfigurationTest do
   test "decode/1" do
     assert %NetworkConfiguration{
              status: %Status{},
-             lora_options: %Register.LorawanOptions{},
-             provisioning_mode: :otaa
+             lorawan_options: %Register.LorawanOptions{},
+             activation_mode: %Register.ActivationMode{mode: :otaa}
            } =
              NetworkConfiguration.decode(<<
                0x20,

@@ -55,15 +55,13 @@ defmodule AdeunisHelpers.FrameGenerator do
   end
 
   def network_configuration() do
-    provisioning_modes = Enum.map([:abp, :otaa], &constant/1)
-
     gen all status <- status(),
-            {_, lora_options} <- RegisterGenerator.lorawan_options(),
-            provisioning_mode <- one_of(provisioning_modes) do
+            {_, lorawan_options} <- RegisterGenerator.lorawan_options(),
+            {_, activation_mode} <- RegisterGenerator.activation_mode() do
       %Frame.NetworkConfiguration{
         status: status,
-        lora_options: lora_options,
-        provisioning_mode: provisioning_mode
+        lorawan_options: lorawan_options,
+        activation_mode: activation_mode
       }
     end
   end

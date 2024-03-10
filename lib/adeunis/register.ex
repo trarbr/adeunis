@@ -3,6 +3,7 @@ defmodule Adeunis.Register do
 
   @register_id_to_module %{
     220 => Register.LorawanOptions,
+    221 => Register.ActivationMode,
     300 => Register.KeepAlive,
     [301, 323, 324, 325, 326, 327] => Register.PeriodicTransmitPeriod,
     304 => Register.PINCode,

@@ -3,6 +3,15 @@ defmodule AdeunisHelpers.RegisterGenerator do
 
   alias Adeunis.Register
 
+  def activation_mode() do
+    modes = Enum.map([:abp, :otaa], &constant/1)
+
+    gen all register_id <- constant(221),
+            mode <- one_of(modes) do
+      {register_id, %Register.ActivationMode{mode: mode}}
+    end
+  end
+
   def alarm_configuration() do
     register_ids = Enum.map(Range.to_list(350..395//5), &constant/1)
 
@@ -171,6 +180,7 @@ defmodule AdeunisHelpers.RegisterGenerator do
 
   def register() do
     one_of([
+      activation_mode(),
       alarm_configuration(),
       alarm_hysteresis(),
       alarm_repetition_period(),
