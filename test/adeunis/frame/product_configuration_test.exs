@@ -4,17 +4,17 @@ defmodule Adeunis.Frame.ProductConfigurationTest do
 
   alias AdeunisHelpers.FrameGenerator
   alias Adeunis.Frame.ProductConfiguration
-  alias Adeunis.Frame.ModbusConfig
   alias Adeunis.Frame.Status
+  alias Adeunis.Register
 
   test "decode/1" do
     assert %ProductConfiguration{
              status: %Status{},
-             transmission_period_keep_alive: 8640,
-             transmission_period_periodic_frame: 8640,
-             sampling_period: 180,
-             modbus_config: %ModbusConfig{},
-             modbus_slave_supply_time: 256
+             keep_alive: %Register.KeepAlive{period: 86400},
+             periodic_transmit_period: %Register.PeriodicTransmitPeriod{period: 86400},
+             alarm_sampling_period: %Register.AlarmSamplingPeriod{period: 1800},
+             modbus_link_configuration: %Register.ModbusLinkConfiguration{},
+             modbus_slave_supply_time: %Register.ModbusSlaveSupplyTime{supply_time: 25600}
            } =
              ProductConfiguration.decode(
                <<0x10, 0x10, 0x21C0::16, 0x21C0::16, 0x00B4::16, 0x44, 0x100::16>>

@@ -1,13 +1,14 @@
 defmodule Adeunis.Frame.NetworkConfiguration do
   alias Adeunis.Frame
+  alias Adeunis.Register
 
-  defstruct [:status, :lora_options, :provisioning_mode]
+  defstruct [:status, :lorawan_options, :activation_mode]
 
-  def decode(<<0x20, status::bytes-1, lora_options::bytes-1, provisioning_mode>>) do
+  def decode(<<0x20, status::bytes-1, lorawan_options::bytes-1, activation_mode::bytes-1>>) do
     %__MODULE__{
       status: Frame.Status.decode(status),
-      lora_options: Frame.LorawanOptions.decode(lora_options),
-      provisioning_mode: decode_provisioning_mode(provisioning_mode)
+      lorawan_options: Register.LorawanOptions.decode(lorawan_options),
+      activation_mode: Register.ActivationMode.decode(activation_mode)
     }
   end
 
@@ -15,21 +16,8 @@ defmodule Adeunis.Frame.NetworkConfiguration do
     <<
       0x20,
       Frame.Status.encode(frame.status)::bytes-1,
-      Frame.LorawanOptions.encode(frame.lora_options)::bytes-1,
-      encode_provisioning_mode(frame.provisioning_mode)
+      Register.LorawanOptions.encode(frame.lorawan_options)::bytes-1,
+      Register.ActivationMode.encode(frame.activation_mode)::bytes-1
     >>
-  end
-
-  @provisioning_mode %{
-    0 => :abp,
-    1 => :otaa
-  }
-
-  defp decode_provisioning_mode(provisioning_mode)
-  defp encode_provisioning_mode(provisioning_mode)
-
-  for {value, provisioning_mode} <- @provisioning_mode do
-    defp decode_provisioning_mode(unquote(value)), do: unquote(provisioning_mode)
-    defp encode_provisioning_mode(unquote(provisioning_mode)), do: unquote(value)
   end
 end

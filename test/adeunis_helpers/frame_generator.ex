@@ -2,6 +2,7 @@ defmodule AdeunisHelpers.FrameGenerator do
   use ExUnitProperties
 
   alias Adeunis.Frame
+  alias AdeunisHelpers.RegisterGenerator
 
   def alarms() do
     alarm_statuses = Enum.map([:none, :high_threshold, :low_threshold], &constant/1)
@@ -30,13 +31,9 @@ defmodule AdeunisHelpers.FrameGenerator do
   end
 
   def get_register_request() do
-    gen all first_register <- integer(0..199),
-            second_register <- integer(0..199),
-            third_register <- integer(0..199) do
+    gen all registers <- list_of(integer(300..400), min: 1, max: 5) do
       %Frame.GetRegistersRequest{
-        first_register: first_register + 300,
-        second_register: second_register + 300,
-        third_register: third_register + 300
+        registers: registers
       }
     end
   end
@@ -57,50 +54,14 @@ defmodule AdeunisHelpers.FrameGenerator do
     end
   end
 
-  def lorawan_options() do
-    adr_activations = Enum.map([:off, :on], &constant/1)
-    duty_cycle_statuses = Enum.map([:off, :on], &constant/1)
-    classes = Enum.map([:a, :c], &constant/1)
-
-    gen all class <- one_of(classes),
-            duty_cycle_status <- one_of(duty_cycle_statuses),
-            adr_activation <- one_of(adr_activations) do
-      %Frame.LorawanOptions{
-        class: class,
-        duty_cycle_status: duty_cycle_status,
-        adr_activation: adr_activation
-      }
-    end
-  end
-
-  def modbus_config() do
-    baud_rates = Enum.map([1200, 2400, 4800, 9600, 19200, 38400, 57600, 115_200], &constant/1)
-    parities = Enum.map([:none, :even, :odd], &constant/1)
-    bus_types = Enum.map([:rs_485, :rs_232], &constant/1)
-
-    gen all baud_rate <- one_of(baud_rates),
-            parity <- one_of(parities),
-            stop_bits <- integer(0..1),
-            bus_type <- one_of(bus_types) do
-      %Frame.ModbusConfig{
-        baud_rate: baud_rate,
-        parity: parity,
-        stop_bits: stop_bits + 1,
-        bus_type: bus_type
-      }
-    end
-  end
-
   def network_configuration() do
-    provisioning_modes = Enum.map([:abp, :otaa], &constant/1)
-
     gen all status <- status(),
-            lora_options <- lorawan_options(),
-            provisioning_mode <- one_of(provisioning_modes) do
+            {_, lorawan_options} <- RegisterGenerator.lorawan_options(),
+            {_, activation_mode} <- RegisterGenerator.activation_mode() do
       %Frame.NetworkConfiguration{
         status: status,
-        lora_options: lora_options,
-        provisioning_mode: provisioning_mode
+        lorawan_options: lorawan_options,
+        activation_mode: activation_mode
       }
     end
   end
@@ -121,17 +82,17 @@ defmodule AdeunisHelpers.FrameGenerator do
 
   def product_configuration() do
     gen all status <- status(),
-            transmission_period_keep_alive <- integer(0x0000..0xFFFF),
-            transmission_period_periodic_frame <- integer(0x0000..0xFFFF),
-            sampling_period <- integer(0x0000..0xFFFF),
-            modbus_config <- modbus_config(),
-            modbus_slave_supply_time <- integer(0x0000..0xFFFF) do
+            {_, keep_alive} <- RegisterGenerator.keep_alive(),
+            {_, periodic_transmit_period} <- RegisterGenerator.periodic_transmit_period(),
+            {_, alarm_sampling_period} <- RegisterGenerator.alarm_sampling_period(),
+            {_, modbus_link_configuration} <- RegisterGenerator.modbus_link_configuration(),
+            {_, modbus_slave_supply_time} <- RegisterGenerator.modbus_slave_supply_time() do
       %Frame.ProductConfiguration{
         status: status,
-        transmission_period_keep_alive: transmission_period_keep_alive,
-        transmission_period_periodic_frame: transmission_period_periodic_frame,
-        sampling_period: sampling_period,
-        modbus_config: modbus_config,
+        keep_alive: keep_alive,
+        periodic_transmit_period: periodic_transmit_period,
+        alarm_sampling_period: alarm_sampling_period,
+        modbus_link_configuration: modbus_link_configuration,
         modbus_slave_supply_time: modbus_slave_supply_time
       }
     end
@@ -170,8 +131,15 @@ defmodule AdeunisHelpers.FrameGenerator do
   end
 
   def set_register_request() do
-    gen all registers <- binary(min_length: 3, max_length: 3 * 4) do
+    gen all registers <- list_of(settable_register(), min_length: 1, max_length: 3) do
       %Frame.SetRegistersRequest{registers: registers}
+    end
+  end
+
+  defp settable_register() do
+    gen all {register_id, register} <- RegisterGenerator.register(),
+            register_id >= 300 do
+      {register_id, register}
     end
   end
 

@@ -1,20 +1,23 @@
 defmodule Adeunis.Frame.GetRegistersRequest do
-  defstruct [:first_register, :second_register, :third_register]
+  defstruct [:registers]
 
-  def decode(<<
-        0x40,
-        first_register,
-        second_register,
-        third_register
-      >>) do
+  def decode(<<0x40, registers::bytes>>) do
+    registers =
+      for <<register <- registers>> do
+        register + 300
+      end
+
     %__MODULE__{
-      first_register: 300 + first_register,
-      second_register: 300 + second_register,
-      third_register: 300 + third_register
+      registers: registers
     }
   end
 
   def encode(%__MODULE__{} = frame) do
-    <<0x40, frame.first_register - 300, frame.second_register - 300, frame.third_register - 300>>
+    registers =
+      for register <- frame.registers, into: <<>> do
+        <<register - 300>>
+      end
+
+    <<0x40, registers::bytes>>
   end
 end

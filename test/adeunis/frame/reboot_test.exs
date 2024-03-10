@@ -6,9 +6,9 @@ defmodule Adeunis.Frame.RebootTest do
   alias Adeunis.Frame.Reboot
 
   test "decode/1" do
-    %Reboot{
-      delay: 1440
-    } = Reboot.decode(<<0x48, 0x05A0::16>>)
+    assert %Reboot{
+             delay: 1440
+           } = Reboot.decode(<<0x48, 0x05A0::16>>)
   end
 
   property "codec is symmetric" do
