@@ -5,7 +5,7 @@ defmodule Adeunis.Register.PeriodicDataTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.PeriodicData
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %PeriodicData{
              slave_address: 10,
              first_register_address: 0x1234,

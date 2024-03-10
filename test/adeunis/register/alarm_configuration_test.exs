@@ -5,7 +5,7 @@ defmodule Adeunis.Register.AlarmConfigurationTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.AlarmConfiguration
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %AlarmConfiguration{
              slave_address: 120,
              first_register_address: 0xFA04,

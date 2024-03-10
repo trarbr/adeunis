@@ -5,7 +5,7 @@ defmodule Adeunis.Register.KeepAliveTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.KeepAlive
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %KeepAlive{period: 30} = KeepAlive.decode(<<0x00, 0x03>>)
   end
 

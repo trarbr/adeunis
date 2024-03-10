@@ -5,7 +5,7 @@ defmodule Adeunis.Register.ModbusSlaveSupplyTimeTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.ModbusSlaveSupplyTime
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %ModbusSlaveSupplyTime{supply_time: 25_000} =
              ModbusSlaveSupplyTime.decode(<<0x00, 0xFA>>)
   end

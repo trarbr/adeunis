@@ -5,7 +5,7 @@ defmodule Adeunis.Register.LEDActivityTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.LEDActivity
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %LEDActivity{led_activity: :default} = LEDActivity.decode(<<0x18007F::32>>)
   end
 

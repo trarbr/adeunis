@@ -5,7 +5,7 @@ defmodule Adeunis.Register.AlarmThresholdTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.AlarmThreshold
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %AlarmThreshold{threshold: 305_419_896} = AlarmThreshold.decode(<<0x12345678::32>>)
   end
 

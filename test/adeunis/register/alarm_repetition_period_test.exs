@@ -5,7 +5,7 @@ defmodule Adeunis.Register.AlarmRepetitionPeriodTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.AlarmRepetitionPeriod
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %AlarmRepetitionPeriod{period: 35} = AlarmRepetitionPeriod.decode(<<0x00, 0x23>>)
   end
 

@@ -5,7 +5,7 @@ defmodule Adeunis.Frame.ModbusLinkConfigurationTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.ModbusLinkConfiguration
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %ModbusLinkConfiguration{
              bus_type: :rs_485,
              stop_bits: 1,

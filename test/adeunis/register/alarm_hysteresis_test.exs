@@ -5,7 +5,7 @@ defmodule Adeunis.Register.AlarmHysteresisTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.AlarmHysteresis
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %AlarmHysteresis{hysteresis: 1234} = AlarmHysteresis.decode(<<0x04D2::16>>)
   end
 

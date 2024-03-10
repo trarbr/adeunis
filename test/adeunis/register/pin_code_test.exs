@@ -5,7 +5,7 @@ defmodule Adeunis.Register.PINCodeTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.PINCode
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %PINCode{code: 7373} = PINCode.decode(<<0x1CCD::16>>)
   end
 

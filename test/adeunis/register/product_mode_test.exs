@@ -5,7 +5,7 @@ defmodule Adeunis.Register.ProductModeTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.ProductMode
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %ProductMode{mode: :park} = ProductMode.decode(<<0>>)
   end
 

@@ -5,7 +5,7 @@ defmodule Adeunis.Register.PeriodicTransmitPeriodTest do
   alias AdeunisHelpers.RegisterGenerator
   alias Adeunis.Register.PeriodicTransmitPeriod
 
-  test "decode/1 can decode any valid register" do
+  test "decode/1" do
     assert %PeriodicTransmitPeriod{period: 30} = PeriodicTransmitPeriod.decode(<<0x00, 0x03>>)
   end
 
