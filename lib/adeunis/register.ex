@@ -19,6 +19,9 @@ defmodule Adeunis.Register do
     (Range.to_list(352..397//5) ++ Range.to_list(354..399//5)) => Register.AlarmHysteresis
   }
 
+  def decode(content, register_id)
+  def encode(register)
+
   for {register_id, module} <- @register_id_to_module,
       is_list(register_id) do
     def decode(content, register_id) when register_id in unquote(register_id) do
