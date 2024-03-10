@@ -1,0 +1,44 @@
+name: Elixir tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+env:
+  MIX_ENV: test
+
+jobs:
+  build:
+    name: Test on Erlang/OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+    strategy:
+      matrix:
+        otp: ['26.2.3']
+        elixir: ['1.15.7', '1.16.2']
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Elixir
+      uses: erlef/setup-beam@v1
+      with:
+        otp-version: '${{matrix.otp}}'
+        elixir-version: '${{matrix.elixir}}'
+    - name: Restore dependencies cache
+      uses: actions/cache@v3
+      with:
+        path: deps
+        key: ${{ runner.os }}-mix-${{ hashFiles('mix.lock') }}
+        restore-keys: ${{ runner.os }}-mix-
+    - name: Install dependencies
+      run: mix deps.get
+    - name: Compile (and fail on compiler warnings)
+      run: mix compile --warnings-as-errors
+    - name: Check Formatting
+      run: mix format --check-formatted
+    - name: Run tests
+      run: mix test --warnings-as-errors
